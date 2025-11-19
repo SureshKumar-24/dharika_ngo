@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui/Section';
 import { GoldDivider } from '@/components/ui/GoldDivider';
 import { Input } from '@/components/ui/Input';
@@ -200,14 +200,14 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                 />
 
                 {/* Interest - Radio Buttons */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <label className="block text-sm font-medium text-foreground">
                     Area of Interest
                     <span className="text-maroon ml-1" aria-label="required">
                       *
                     </span>
                   </label>
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
                       { value: 'food', label: 'Food Drives' },
                       { value: 'teaching', label: 'Teaching Drives' },
@@ -215,7 +215,14 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                     ].map((option) => (
                       <label
                         key={option.value}
-                        className="flex items-center gap-2 cursor-pointer"
+                        className={`
+                          relative flex items-center justify-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all
+                          ${
+                            formData.interest === option.value
+                              ? 'border-gold bg-gold/5 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-gold/50 hover:bg-gold/5'
+                          }
+                        `}
                       >
                         <input
                           type="radio"
@@ -223,9 +230,34 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                           value={option.value}
                           checked={formData.interest === option.value}
                           onChange={(e) => handleChange('interest', e.target.value)}
-                          className="w-5 h-5 text-gold focus:ring-gold focus:ring-2"
+                          className="sr-only"
                         />
-                        <span className="text-base text-foreground">{option.label}</span>
+                        <div
+                          className={`
+                            w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all
+                            ${
+                              formData.interest === option.value
+                                ? 'border-gold bg-gold'
+                                : 'border-gray-300 bg-white'
+                            }
+                          `}
+                        >
+                          {formData.interest === option.value && (
+                            <div className="w-2 h-2 rounded-full bg-white" />
+                          )}
+                        </div>
+                        <span
+                          className={`
+                            text-base font-medium transition-colors
+                            ${
+                              formData.interest === option.value
+                                ? 'text-foreground'
+                                : 'text-gray-600'
+                            }
+                          `}
+                        >
+                          {option.label}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -263,7 +295,7 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                 {/* Status Messages */}
                 {status === 'success' && (
                   <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
                     <p className="text-green-800">
                       Thank you for joining! We'll be in touch soon.
                     </p>
@@ -272,7 +304,7 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
 
                 {status === 'error' && (
                   <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                    <XCircle className="w-5 h-5 text-red-600 shrink-0" />
                     <p className="text-red-800">{errorMessage}</p>
                   </div>
                 )}
