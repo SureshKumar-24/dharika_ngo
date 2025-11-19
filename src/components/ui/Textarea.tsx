@@ -4,17 +4,18 @@ import { cn } from '@/lib/utils';
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   error?: string;
+  labelClassName?: string;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, id, name, required, rows = 4, ...props }, ref) => {
+  ({ className, label, error, id, name, required, rows = 4, labelClassName, ...props }, ref) => {
     const textareaId = id || name;
     
     return (
       <div className="w-full">
         <label
           htmlFor={textareaId}
-          className="block text-sm font-medium text-foreground mb-2"
+          className={cn("block text-sm font-medium text-foreground mb-2", labelClassName)}
         >
           {label}
           {required && <span className="text-maroon ml-1" aria-label="required">*</span>}

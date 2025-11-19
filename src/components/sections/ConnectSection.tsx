@@ -122,7 +122,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
               <div className="space-y-6">
                 {/* Email */}
                 <div className="flex items-start gap-4">
-                  <Mail className="w-6 h-6 text-gold flex-shrink-0 mt-1" aria-hidden="true" />
+                  <Mail className="w-6 h-6 text-gold shrink-0 mt-1" aria-hidden="true" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Email</h3>
                     <a
@@ -136,7 +136,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
 
                 {/* Location */}
                 <div className="flex items-start gap-4">
-                  <MapPin className="w-6 h-6 text-gold flex-shrink-0 mt-1" aria-hidden="true" />
+                  <MapPin className="w-6 h-6 text-gold shrink-0 mt-1" aria-hidden="true" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Location</h3>
                     <p className="text-white/90">{location}</p>
@@ -146,7 +146,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
                 {/* Social Media */}
                 <div className="flex items-start gap-4">
                   <MessageSquare
-                    className="w-6 h-6 text-gold flex-shrink-0 mt-1"
+                    className="w-6 h-6 text-gold shrink-0 mt-1"
                     aria-hidden="true"
                   />
                   <div>
@@ -193,6 +193,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
                   error={errors.name}
+                  labelClassName="text-white"
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                 />
 
@@ -205,6 +206,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   error={errors.email}
+                  labelClassName="text-white"
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                 />
 
@@ -218,6 +220,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
                   value={formData.message}
                   onChange={(e) => handleChange('message', e.target.value)}
                   error={errors.message}
+                  labelClassName="text-white"
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                 />
 
