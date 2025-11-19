@@ -216,10 +216,10 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                       <label
                         key={option.value}
                         className={`
-                          relative flex items-center justify-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all
+                          relative flex items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-all
                           ${
                             formData.interest === option.value
-                              ? 'border-gold bg-gold/5 shadow-sm'
+                              ? 'border-gold bg-gold/10 shadow-sm'
                               : 'border-gray-200 bg-white hover:border-gold/50 hover:bg-gold/5'
                           }
                         `}
@@ -232,20 +232,6 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
                           onChange={(e) => handleChange('interest', e.target.value)}
                           className="sr-only"
                         />
-                        <div
-                          className={`
-                            w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all
-                            ${
-                              formData.interest === option.value
-                                ? 'border-gold bg-gold'
-                                : 'border-gray-300 bg-white'
-                            }
-                          `}
-                        >
-                          {formData.interest === option.value && (
-                            <div className="w-2 h-2 rounded-full bg-white" />
-                          )}
-                        </div>
                         <span
                           className={`
                             text-base font-medium transition-colors
