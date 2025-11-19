@@ -131,31 +131,32 @@ export function getMockCarouselSlides(): CarouselSlide[] {
   return [
     {
       id: 'mock-1',
-      title: 'Make a Difference Today',
-      mediaUrl: `${CLOUDINARY_BASE}/v1763573391/Dharika/gallery/lf4cjqhztn9svqnwjcwj.jpg`,
-      mediaType: 'image',
-      ctaText: 'Get Involved',
-      ctaLink: '#join',
-      order: 1,
-    },
-    {
-      id: 'mock-2',
-      title: 'Join Our Food Deliveries',
-      mediaUrl: `${CLOUDINARY_BASE}/v1763573388/Dharika/gallery/xxm7p9tpc6hrje6phuze.jpg`,
-      mediaType: 'image',
-      ctaText: 'Volunteer Now',
-      ctaLink: '#join',
-      order: 2,
-    },
-    {
-      id: 'mock-3',
       title: 'Empower Through Education',
       mediaUrl: `${CLOUDINARY_BASE}/v1763573389/Dharika/gallery/tovc0dg3hxmwsutrmdc9.jpg`,
       mediaType: 'image',
       ctaText: 'Teach a Skill',
       ctaLink: '#join',
+      order: 1,
+    },
+    {
+      id: 'mock-2',
+      title: 'Make a Difference Today',
+      mediaUrl: `${CLOUDINARY_BASE}/v1763573391/Dharika/gallery/lf4cjqhztn9svqnwjcwj.jpg`,
+      mediaType: 'image',
+      ctaText: 'Get Involved',
+      ctaLink: '#join',
+      order: 2,
+    },
+    {
+      id: 'mock-3',
+      title: 'Join Our Food Deliveries',
+      mediaUrl: `${CLOUDINARY_BASE}/v1763573388/Dharika/gallery/xxm7p9tpc6hrje6phuze.jpg`,
+      mediaType: 'image',
+      ctaText: 'Volunteer Now',
+      ctaLink: '#join',
       order: 3,
     },
+
   ];
 }
 

@@ -114,10 +114,10 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
       <GoldDivider className="my-0" />
       <Section id="connect" className="bg-maroon text-white py-16 md:py-24">
         <Container>
-          <div className="grid md:grid-cols-2 gap-12 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12">
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">Get in Touch</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8">Get in Touch</h2>
 
               <div className="space-y-6">
                 {/* Email */}
@@ -178,7 +178,7 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
 
             {/* Suggestion Form */}
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Send a Suggestion</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Send a Suggestion</h2>
               <p className="text-white/90 mb-6">
                 Have ideas on how we can improve? We'd love to hear from you!
               </p>
@@ -267,11 +267,11 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
 
           {/* Footer Links */}
           <div className="border-t border-white/20 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-white/80 text-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-white/80 text-sm text-center sm:text-left">
                 © {new Date().getFullYear()} Dharika. All rights reserved.
               </p>
-              <div className="flex gap-6 text-sm">
+              <div className="flex gap-4 sm:gap-6 text-sm">
                 <a
                   href={socialLinks.whatsapp}
                   target="_blank"

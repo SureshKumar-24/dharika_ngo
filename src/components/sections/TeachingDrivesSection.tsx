@@ -46,7 +46,7 @@ export const TeachingDrivesSection: React.FC<TeachingDrivesSectionProps> = ({
                 initial={{ opacity: 0, x: -20 }}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="grid grid-cols-2 gap-4 md:order-1"
+                className="grid grid-cols-2 gap-3 sm:gap-4 md:order-1"
               >
                 {images.map((image, index) => (
                   <div
@@ -77,16 +77,16 @@ export const TeachingDrivesSection: React.FC<TeachingDrivesSectionProps> = ({
 
                 {/* Statistics */}
                 {statistics && statistics.length > 0 && (
-                  <div className="grid grid-cols-2 gap-4 mt-8">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-8">
                     {statistics.map((stat, index) => (
                       <div
                         key={index}
-                        className="bg-white rounded-lg p-4 text-center shadow-sm"
+                        className="bg-white rounded-lg p-3 sm:p-4 text-center shadow-sm"
                       >
-                        <div className="text-3xl font-bold text-maroon mb-1">
+                        <div className="text-2xl sm:text-3xl font-bold text-maroon mb-1">
                           {stat.value}
                         </div>
-                        <div className="text-sm text-gray-600">{stat.label}</div>
+                        <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
                       </div>
                     ))}
                   </div>

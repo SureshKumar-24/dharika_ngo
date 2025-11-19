@@ -42,14 +42,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             </p>
 
             {/* Testimonials Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={testimonial.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
-                  className="bg-white rounded-2xl p-8 shadow-sm relative"
+                  className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm relative"
                 >
                   {/* Quote Icon */}
                   <div className="absolute -top-4 left-8">
