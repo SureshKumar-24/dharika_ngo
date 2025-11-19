@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { volunteerFormSchema } from '@/lib/validations';
-import { appendVolunteerData, isGoogleSheetsConfigured } from '@/lib/googleSheets';
+import { insertVolunteer } from '@/lib/db';
 
 // Rate limiting map (in production, use Redis or similar)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -63,18 +63,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if Google Sheets is configured
-    if (!isGoogleSheetsConfigured()) {
-      console.warn('Google Sheets not configured, skipping data storage');
-      // In development, just return success
-      return NextResponse.json(
-        { success: true, message: 'Form submitted successfully (dev mode)' },
-        { status: 200 }
-      );
-    }
-
-    // Append data to Google Sheets
-    await appendVolunteerData({
+    // Insert data into Neon database
+    const dbResult = await insertVolunteer({
       name: result.data.name,
       phone: result.data.phone,
       email: result.data.email,
@@ -84,7 +74,11 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { success: true, message: 'Thank you for volunteering! We will contact you soon.' },
+      { 
+        success: true, 
+        message: 'Thank you for volunteering! We will contact you soon.',
+        id: dbResult.id 
+      },
       { status: 200 }
     );
   } catch (error) {

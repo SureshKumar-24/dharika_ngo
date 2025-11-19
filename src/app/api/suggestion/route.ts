@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { suggestionFormSchema } from '@/lib/validations';
-import { appendSuggestionData, isGoogleSheetsConfigured } from '@/lib/googleSheets';
+import { insertSuggestion } from '@/lib/db';
 
 // Rate limiting map (in production, use Redis or similar)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -63,25 +63,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if Google Sheets is configured
-    if (!isGoogleSheetsConfigured()) {
-      console.warn('Google Sheets not configured, skipping data storage');
-      // In development, just return success
-      return NextResponse.json(
-        { success: true, message: 'Suggestion submitted successfully (dev mode)' },
-        { status: 200 }
-      );
-    }
-
-    // Append data to Google Sheets
-    await appendSuggestionData({
+    // Insert data into Neon database
+    const dbResult = await insertSuggestion({
       name: result.data.name,
       email: result.data.email,
       message: result.data.message,
     });
 
     return NextResponse.json(
-      { success: true, message: 'Thank you for your suggestion!' },
+      { 
+        success: true, 
+        message: 'Thank you for your suggestion!',
+        id: dbResult.id 
+      },
       { status: 200 }
     );
   } catch (error) {
