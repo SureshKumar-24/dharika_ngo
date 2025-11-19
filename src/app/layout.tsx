@@ -36,6 +36,16 @@ export const metadata: Metadata = {
   creator: "Dharika",
   publisher: "Dharika",
   metadataBase: new URL(SITE_CONFIG.url),
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '500x500', type: 'image/png' },
+      { url: '/dharika-logo.png', sizes: '500x500', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '500x500', type: 'image/png' },
+    ],
+    shortcut: ['/dharika-logo.png'],
+  },
   alternates: {
     canonical: '/',
   },
