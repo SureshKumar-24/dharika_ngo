@@ -70,6 +70,19 @@ export async function POST(request: NextRequest) {
       message: result.data.message,
     });
 
+    // Also save to Google Sheets (non-blocking)
+    try {
+      const { appendSuggestionData } = await import('@/lib/googleSheets');
+      await appendSuggestionData({
+        name: result.data.name,
+        email: result.data.email,
+        message: result.data.message,
+      });
+    } catch (sheetsError) {
+      console.error('Failed to sync to Google Sheets:', sheetsError);
+      // Continue anyway - database save was successful
+    }
+
     return NextResponse.json(
       { 
         success: true, 

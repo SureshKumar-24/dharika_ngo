@@ -28,10 +28,11 @@ export async function appendVolunteerData(
   data: Omit<VolunteerSubmission, 'timestamp' | 'source'>
 ): Promise<void> {
   try {
-    const sheetId = process.env.GOOGLE_SHEET_ID_VOLUNTEER;
+    const sheetId = process.env.GOOGLE_SHEET_ID;
     
     if (!sheetId) {
-      throw new Error('GOOGLE_SHEET_ID_VOLUNTEER not configured');
+      console.warn('GOOGLE_SHEET_ID not configured, skipping Google Sheets sync');
+      return;
     }
 
     const sheets = getGoogleSheetsClient();
@@ -51,17 +52,17 @@ export async function appendVolunteerData(
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: 'Sheet1!A:H', // Adjust sheet name if needed
+      range: 'Volunteer List!A:H',
       valueInputOption: 'RAW',
       requestBody: {
         values: [row],
       },
     });
 
-    console.log('Volunteer data appended successfully');
+    console.log('Volunteer data appended successfully to Google Sheets');
   } catch (error) {
     console.error('Error appending volunteer data to Google Sheets:', error);
-    throw new Error('Failed to save volunteer data');
+    // Don't throw error - allow the request to succeed even if Sheets fails
   }
 }
 
@@ -72,10 +73,11 @@ export async function appendSuggestionData(
   data: Omit<SuggestionSubmission, 'timestamp' | 'source'>
 ): Promise<void> {
   try {
-    const sheetId = process.env.GOOGLE_SHEET_ID_SUGGESTION;
+    const sheetId = process.env.GOOGLE_SHEET_ID;
     
     if (!sheetId) {
-      throw new Error('GOOGLE_SHEET_ID_SUGGESTION not configured');
+      console.warn('GOOGLE_SHEET_ID not configured, skipping Google Sheets sync');
+      return;
     }
 
     const sheets = getGoogleSheetsClient();
@@ -92,17 +94,17 @@ export async function appendSuggestionData(
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: 'Sheet1!A:E', // Adjust sheet name if needed
+      range: 'Suggestions!A:E',
       valueInputOption: 'RAW',
       requestBody: {
         values: [row],
       },
     });
 
-    console.log('Suggestion data appended successfully');
+    console.log('Suggestion data appended successfully to Google Sheets');
   } catch (error) {
     console.error('Error appending suggestion data to Google Sheets:', error);
-    throw new Error('Failed to save suggestion');
+    // Don't throw error - allow the request to succeed even if Sheets fails
   }
 }
 
@@ -113,7 +115,7 @@ export function isGoogleSheetsConfigured(): boolean {
   return !!(
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
     process.env.GOOGLE_PRIVATE_KEY &&
-    (process.env.GOOGLE_SHEET_ID_VOLUNTEER || process.env.GOOGLE_SHEET_ID_SUGGESTION)
+    process.env.GOOGLE_SHEET_ID
   );
 }
 
