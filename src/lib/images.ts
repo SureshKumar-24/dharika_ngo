@@ -11,18 +11,18 @@ export const IMAGES = {
 
   // Food Drives Images
   foodDrives: {
-    image1: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/food-drive-1.jpg`,
-    image2: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/food-drive-2.jpg`,
-    image3: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/food-drive-3.jpg`,
-    image4: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/food-drive-4.jpg`,
+    image1: `${CLOUDINARY_BASE_URL}/v1763573392/Dharika/gallery/iuuzz6g2mrboothcou0z.jpg`,
+    image2: `${CLOUDINARY_BASE_URL}/v1763573388/Dharika/gallery/xxm7p9tpc6hrje6phuze.jpg`,
+    image3: `${CLOUDINARY_BASE_URL}/v1763573388/Dharika/gallery/lbedrmmfeoq9kdvjbhck.jpg`,
+    image4: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/lbedrmmfeoq9kdvjbhck.jpg`,
   },
 
   // Teaching Drives Images
   teachingDrives: {
-    image1: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/teaching-1.jpg`,
-    image2: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/teaching-2.jpg`,
-    image3: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/teaching-3.jpg`,
-    image4: `${CLOUDINARY_BASE_URL}/v1763573431/Dharika/gallery/teaching-4.jpg`,
+    image1: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/tovc0dg3hxmwsutrmdc9.jpg`,
+    image2: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/xrjzcj4gkmpxzighnl9l.jpg`,
+    image3: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/tovc0dg3hxmwsutrmdc9.jpg`,
+    image4: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/xrjzcj4gkmpxzighnl9l.jpg`,
   },
 
   // Carousel/Hero Images

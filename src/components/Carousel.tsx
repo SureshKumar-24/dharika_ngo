@@ -97,13 +97,13 @@ export const Carousel: React.FC<CarouselProps> = ({
               className="relative flex-[0_0_100%] min-w-0"
             >
               {/* Media Container */}
-              <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px]">
+              <div className="relative w-full h-[450px] md:h-[550px] lg:h-[650px] bg-maroon">
                 {slide.mediaType === 'image' ? (
                   <Image
                     src={slide.mediaUrl}
                     alt={slide.title}
                     fill
-                    className="object-cover"
+                    className="object-cover object-center"
                     priority={selectedIndex === 0}
                     sizes="100vw"
                   />
@@ -114,7 +114,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                     muted
                     loop
                     playsInline
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                     aria-label={slide.title}
                   />
                 )}

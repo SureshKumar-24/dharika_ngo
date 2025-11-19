@@ -77,12 +77,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <>
       <nav
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
-            : 'bg-transparent'
-        )}
+        className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md"
         role="navigation"
         aria-label="Main navigation"
       >

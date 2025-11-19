@@ -8,7 +8,7 @@ export interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
   return (
-    <section id="hero" className="relative w-full">
+    <section id="hero" className="relative w-full pt-16">
       <Carousel slides={slides} autoPlayInterval={5000} />
     </section>
   );
