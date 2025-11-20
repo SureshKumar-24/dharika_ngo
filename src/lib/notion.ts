@@ -48,6 +48,7 @@ export async function getCarouselSlides(): Promise<CarouselSlide[]> {
       return {
         id: page.id,
         title: properties.Title?.title?.[0]?.plain_text || '',
+        subtitle: properties.Subtitle?.rich_text?.[0]?.plain_text || undefined,
         mediaUrl: properties['Media URL']?.url || '',
         mediaType: properties['Media Type']?.select?.name || 'image',
         ctaText: properties['CTA Text']?.rich_text?.[0]?.plain_text || '',
@@ -130,33 +131,35 @@ export function getMockCarouselSlides(): CarouselSlide[] {
   
   return [
     {
-      id: 'mock-1',
-      title: 'Empower Through Education',
+      id: 'hero-1',
+      title: 'Every Child Deserves a Window to the World',
+      subtitle: 'A single opportunity can shape a lifetime. Your support helps open that window.',
       mediaUrl: `${CLOUDINARY_BASE}/v1763573389/Dharika/gallery/tovc0dg3hxmwsutrmdc9.jpg`,
       mediaType: 'image',
-      ctaText: 'Teach a Skill',
+      ctaText: 'Get Involved',
       ctaLink: '#join',
       order: 1,
     },
     {
-      id: 'mock-2',
-      title: 'Make a Difference Today',
+      id: 'hero-2',
+      title: 'A Shared Meal, A Shared Humanity',
+      subtitle: 'Among all the acts of kindness, feeding the hungry stands highest.',
       mediaUrl: `${CLOUDINARY_BASE}/v1763573391/Dharika/gallery/lf4cjqhztn9svqnwjcwj.jpg`,
       mediaType: 'image',
-      ctaText: 'Get Involved',
-      ctaLink: '#join',
+      ctaText: 'Support Food Drives',
+      ctaLink: '#food-drives',
       order: 2,
     },
     {
-      id: 'mock-3',
-      title: 'Join Our Food Deliveries',
+      id: 'hero-3',
+      title: 'Let\'s Build a Brighter Future For Them, One Child At A Time',
+      subtitle: 'Small Acts Together Create a Lifetime Of Impact',
       mediaUrl: `${CLOUDINARY_BASE}/v1763573388/Dharika/gallery/xxm7p9tpc6hrje6phuze.jpg`,
       mediaType: 'image',
       ctaText: 'Volunteer Now',
       ctaLink: '#join',
       order: 3,
     },
-
   ];
 }
 
@@ -166,25 +169,53 @@ export function getMockCarouselSlides(): CarouselSlide[] {
 export function getMockTestimonials(): Testimonial[] {
   return [
     {
-      id: 'mock-1',
-      quote: 'Volunteering with Dharika has been an incredibly rewarding experience. Seeing the smiles on children\'s faces makes every moment worthwhile.',
-      name: 'Priya Sharma',
-      role: 'Teaching Volunteer',
+      id: 'testimonial-1',
+      quote: 'Building Dharika has been something very close to my heart. Every time we sit with the children, their eyes light up with curiosity. They welcome us with open hearts — the kind of warmth you never forget. Even if you visit a hundred times, their eagerness to learn feels brand new each day.',
+      name: 'Siya Sethi',
+      role: 'Founder',
       order: 1,
     },
     {
-      id: 'mock-2',
-      quote: 'The food drive initiative is making a real impact in our community. I\'m proud to be part of this movement.',
-      name: 'Rahul Verma',
-      role: 'Food Drive Coordinator',
+      id: 'testimonial-2',
+      quote: 'When I ask the children what they want to learn next, they smile and say \'bas humein padhna hai\'. When translated, all it means is: they simply want someone to sit with them and teach them gently. Their honesty humbles me every single time.',
+      name: 'Meera Khanna',
+      role: 'Teaching Drive Coordinator',
       order: 2,
     },
     {
-      id: 'mock-3',
-      quote: 'Dharika gave me the opportunity to give back to society in a meaningful way. The organization is well-structured and truly cares about making a difference.',
-      name: 'Ananya Patel',
+      id: 'testimonial-3',
+      quote: 'One child told me, \'Bhaiya, kal phir se aana\'. Behind those words is trust — trust that we will keep showing up for them. That one sentence stays with you long after the drive is over.',
+      name: 'Arjun Malhotra',
       role: 'Volunteer',
       order: 3,
+    },
+    {
+      id: 'testimonial-4',
+      quote: 'Meri beti school nahi jaa paati, par yahan likhna seekh rahi hai. There was pride in her voice — the quiet kind that comes from knowing her child finally has a chance she never had.',
+      name: 'Parent',
+      role: 'Community Member',
+      order: 4,
+    },
+    {
+      id: 'testimonial-5',
+      quote: 'Main bhi uske saath baithu? Mujhe bhi rang karna hai. Sometimes the smallest wishes from the youngest ones remind us why creating safe learning spaces matters so deeply.',
+      name: 'Akash',
+      role: 'Younger Sibling',
+      order: 5,
+    },
+    {
+      id: 'testimonial-6',
+      quote: 'Aap log aate ho toh basti mein shanti si lagti hai. Their words reflect how these small efforts ripple far beyond just the children — they bring dignity, hope, and togetherness to the entire neighbourhood.',
+      name: 'Meera',
+      role: 'Community Elder',
+      order: 6,
+    },
+    {
+      id: 'testimonial-7',
+      quote: 'Didi, main bada hokar teacher banna chahti hoon. In that moment, her dream felt bigger than the space we were standing in — and that is exactly why these drives matter.',
+      name: 'Monica',
+      role: 'Child',
+      order: 7,
     },
   ];
 }

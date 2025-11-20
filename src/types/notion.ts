@@ -6,6 +6,7 @@ export interface NotionCarouselSlide {
   id: string;
   properties: {
     Title: { title: Array<{ plain_text: string }> };
+    Subtitle?: { rich_text: Array<{ plain_text: string }> };
     'Media URL': { url: string };
     'Media Type': { select: { name: 'image' | 'video' } };
     'CTA Text': { rich_text: Array<{ plain_text: string }> };
@@ -29,6 +30,7 @@ export interface NotionTestimonial {
 export interface CarouselSlide {
   id: string;
   title: string;
+  subtitle?: string;
   mediaUrl: string;
   mediaType: 'image' | 'video';
   ctaText: string;

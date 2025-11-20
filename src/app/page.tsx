@@ -42,16 +42,33 @@ export default async function Home() {
 
   const aboutData = {
     logoUrl: SITE_CONFIG.logo,
-    mission:
-      'To empower communities across India by addressing hunger through food drives and fostering education through teaching initiatives, creating lasting positive change.',
-    vision:
-      'A society where every individual has access to nutritious food and quality education, enabling them to reach their full potential and contribute to their communities.',
+    philosophy: {
+      sanskrit: 'वसुधैव कुटुम्बकम्',
+      translation: 'The world is one family.',
+      description: 'This ancient ethos is the foundation on which Dharika stands. Dharika is a multi-vertical initiative built on the belief that creativity, culture, and compassion can coexist and strengthen each other. We operate where ideas meet impact — uniting fashion, technology, and social action under one purpose-driven umbrella.',
+    },
+    ecosystem: [
+      {
+        title: 'Indian Wear Label',
+        description: 'A line dedicated to reviving Indian craftsmanship and cultural identity through modern, meaningful design.',
+      },
+      {
+        title: 'Creative Tech Agency',
+        description: 'A collective of designers, developers, and strategists building digital experiences — from branding and content to full-scale web solutions.',
+      },
+      {
+        title: 'Youth-Led Social Wing',
+        description: 'An initiative mobilizing young individuals to teach, volunteer, and contribute to education, community upliftment, and cultural awareness.',
+      },
+    ],
+    mission: 'We believe that humanity thrives when creativity, compassion, and collaboration come together — no matter the field, background, or skill. At Dharika, we are united by one belief: every individual and every sector can collaborate for something bigger than themselves. A brand can contribute to social change. Innovation and impact can coexist — and thrive.',
+    closing: 'We are here to create, build, and give back. To connect people across disciplines. To inspire a generation that believes in purpose as much as progress. Welcome to Dharika — where culture meets creativity, and creativity fuels change.',
   };
 
   const foodDrivesData = {
-    title: 'Why Food Drives?',
+    title: 'Because No Child Should Sleep Hungry',
     description:
-      'Millions of people in India face food insecurity daily. Our food drives connect surplus food from restaurants, events, and donors with communities in need. We believe no one should go hungry when there is food available. Through our organized distribution network, we ensure fresh, nutritious meals reach those who need them most.',
+      'Millions in India struggle to secure even one proper meal a day — especially children. A simple plate of food restores energy, dignity, and the ability to learn, grow, and live like any other child their age. At Dharika, our youth-led drives ensure fresh, nourishing meals reach the ones who need them most. And along with preparing food, we also redirect surplus meals from cafeterias, caterers, and local kitchens — because what becomes "waste" for one can be a lifeline for another. If you\'re a café, restaurant, or kitchen owner willing to contribute your surplus, you can sign up to be connected directly with the children who need it most.',
     images: [
       { url: IMAGES.foodDrives.image1, alt: 'Food distribution event' },
       { url: IMAGES.foodDrives.image2, alt: 'Volunteers packing meals' },
@@ -59,15 +76,15 @@ export default async function Home() {
       { url: IMAGES.foodDrives.image4, alt: 'Food donation collection' },
     ],
     statistics: [
-      { label: 'Meals Distributed', value: '10K+' },
-      { label: 'Communities Served', value: '50+' },
+      { label: 'Meals Distributed', value: '1K+' },
+      { label: 'Cities Served', value: '10+' },
     ],
   };
 
   const teachingDrivesData = {
-    title: 'Why Teaching Drives?',
+    title: 'Sanskriti, Shiksha, Samarthan',
     description:
-      'Education is the foundation of empowerment. Our teaching drives bring skilled volunteers to underserved communities to teach valuable skills - from basic literacy to vocational training. We focus on practical knowledge that can immediately improve lives and create opportunities for economic independence.',
+      'Education is the one tool that can transform a child\'s entire future — yet thousands of young minds grow up without access to even the basics. A little guidance, a little attention, and a little consistency can change everything. Our youth-led Teaching Drives bring learning directly to children in underserved communities— from basic literacy to spoken English, from school subjects to life skills. Each session is designed to help them build confidence, curiosity, and the ability to dream beyond their circumstances. If you\'re a student, graduate, or working professional with a passion for teaching, you can volunteer with us and become the mentor a child has been waiting for.',
     images: [
       { url: IMAGES.teachingDrives.image1, alt: 'Teaching session in progress' },
       { url: IMAGES.teachingDrives.image2, alt: 'Students learning new skills' },
@@ -75,8 +92,8 @@ export default async function Home() {
       { url: IMAGES.teachingDrives.image4, alt: 'Classroom activity' },
     ],
     statistics: [
-      { label: 'Students Taught', value: '5K+' },
-      { label: 'Skills Workshops', value: '200+' },
+      { label: 'Students Taught', value: '100+' },
+      { label: 'Skill Shops', value: '20+' },
     ],
   };
 
@@ -99,7 +116,7 @@ export default async function Home() {
         <TestimonialsSection testimonials={testimonials} />
         <JoinFormSection />
         <ConnectSection
-          email={CONTACT_INFO.email}
+          emails={CONTACT_INFO.emails}
           location={CONTACT_INFO.location}
           socialLinks={SOCIAL_LINKS}
         />

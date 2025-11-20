@@ -32,15 +32,15 @@ export const NAVIGATION_SECTIONS = [
 ] as const;
 
 export const SOCIAL_LINKS = {
-  instagram: 'https://instagram.com/dharika',
-  linkedin: 'https://linkedin.com/company/dharika',
+  instagram: 'https://www.instagram.com/dharika.co/',
+  linkedin: 'https://www.linkedin.com/in/siya-sethi-a2439a301',
   whatsapp: 'https://wa.me/919876543210',
   telegram: 'https://t.me/dharika',
 } as const;
 
 export const CONTACT_INFO = {
-  email: 'hello@dharika.org',
-  location: 'Mumbai, India',
+  emails: ['Dharika.co@gmail.com', 'sethisiya6@gmail.com'],
+  location: 'Ambal City, 134004, Haryana, India',
 } as const;
 
 export const CAROUSEL_CONFIG = {

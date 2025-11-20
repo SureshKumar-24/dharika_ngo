@@ -11,7 +11,7 @@ import { suggestionFormSchema, type SuggestionFormInput } from '@/lib/validation
 import type { SuggestionFormData } from '@/types/forms';
 
 export interface ConnectSectionProps {
-  email: string;
+  emails: readonly string[] | string[];
   location: string;
   socialLinks: {
     instagram: string;
@@ -25,7 +25,7 @@ export interface ConnectSectionProps {
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ConnectSection: React.FC<ConnectSectionProps> = ({
-  email,
+  emails,
   location,
   socialLinks,
   onSuggestionSubmit,
@@ -125,12 +125,17 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
                   <Mail className="w-6 h-6 text-gold shrink-0 mt-1" aria-hidden="true" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Email</h3>
-                    <a
-                      href={`mailto:${email}`}
-                      className="text-white/90 hover:text-gold transition-colors"
-                    >
-                      {email}
-                    </a>
+                    <div className="space-y-1">
+                      {emails.map((email, index) => (
+                        <a
+                          key={index}
+                          href={`mailto:${email}`}
+                          className="text-white/90 hover:text-gold transition-colors block"
+                        >
+                          {email}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
