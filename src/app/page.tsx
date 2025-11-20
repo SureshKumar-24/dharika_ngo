@@ -18,6 +18,9 @@ import {
 import { SOCIAL_LINKS, CONTACT_INFO, SITE_CONFIG } from '@/lib/constants';
 import { IMAGES } from '@/lib/images';
 
+// Enable static generation with revalidation
+export const revalidate = 3600; // Revalidate every hour
+
 export default async function Home() {
   // Fetch data from Notion or use mock data
   // ISR revalidation is handled via the revalidate API route

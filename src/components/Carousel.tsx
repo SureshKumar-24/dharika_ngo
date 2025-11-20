@@ -104,7 +104,9 @@ export const Carousel: React.FC<CarouselProps> = ({
                     alt={slide.title}
                     fill
                     className="object-cover object-center"
-                    priority={selectedIndex === 0}
+                    priority={slide.order === 1}
+                    loading={slide.order === 1 ? 'eager' : 'lazy'}
+                    quality={85}
                     sizes="100vw"
                   />
                 ) : (

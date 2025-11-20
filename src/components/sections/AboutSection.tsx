@@ -52,6 +52,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 width={120}
                 height={120}
                 className="object-contain"
+                loading="lazy"
+                quality={90}
               />
             </div>
 
