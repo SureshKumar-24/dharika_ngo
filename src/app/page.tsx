@@ -17,6 +17,7 @@ import {
 } from '@/lib/notion';
 import { SOCIAL_LINKS, CONTACT_INFO, SITE_CONFIG } from '@/lib/constants';
 import { IMAGES } from '@/lib/images';
+import { getSectionImages } from '@/lib/db';
 
 // Enable static generation with revalidation
 export const revalidate = 3600; // Revalidate every hour
@@ -41,6 +42,45 @@ export default async function Home() {
       console.error('Error fetching Notion data:', error);
       // Continue with mock data
     }
+  }
+
+  // Fetch section images from database
+  let foodDrivesImages: Array<{ url: string; alt: string }> = [
+    { url: IMAGES.foodDrives.image1, alt: 'Food distribution event' },
+    { url: IMAGES.foodDrives.image2, alt: 'Volunteers packing meals' },
+    { url: IMAGES.foodDrives.image3, alt: 'Community meal service' },
+    { url: IMAGES.foodDrives.image4, alt: 'Food donation collection' },
+  ];
+
+  let teachingDrivesImages: Array<{ url: string; alt: string }> = [
+    { url: IMAGES.teachingDrives.image1, alt: 'Teaching session in progress' },
+    { url: IMAGES.teachingDrives.image2, alt: 'Students learning new skills' },
+    { url: IMAGES.teachingDrives.image3, alt: 'Volunteer teaching children' },
+    { url: IMAGES.teachingDrives.image4, alt: 'Classroom activity' },
+  ];
+
+  try {
+    const [foodImages, teachingImages] = await Promise.all([
+      getSectionImages('food_drives'),
+      getSectionImages('teaching_drives'),
+    ]);
+
+    if (foodImages.length > 0) {
+      foodDrivesImages = foodImages.map((img) => ({
+        url: img.image_url,
+        alt: img.alt_text || 'Food drives image',
+      }));
+    }
+
+    if (teachingImages.length > 0) {
+      teachingDrivesImages = teachingImages.map((img) => ({
+        url: img.image_url,
+        alt: img.alt_text || 'Teaching drives image',
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching section images:', error);
+    // Continue with fallback images
   }
 
   const aboutData = {
@@ -72,12 +112,7 @@ export default async function Home() {
     title: 'Because No Child Should Sleep Hungry',
     description:
       'Millions in India struggle to secure even one proper meal a day — especially children. A simple plate of food restores energy, dignity, and the ability to learn, grow, and live like any other child their age.\n\nAt Dharika, our youth-led drives ensure fresh, nourishing meals reach the ones who need them most. And along with preparing food, we also redirect surplus meals from cafeterias, caterers, and local kitchens — because what becomes "waste" for one can be a lifeline for another.\n\nIf you\'re a café, restaurant, or kitchen owner willing to contribute your surplus, you can sign up to be connected directly with the children who need it most.',
-    images: [
-      { url: IMAGES.foodDrives.image1, alt: 'Food distribution event' },
-      { url: IMAGES.foodDrives.image2, alt: 'Volunteers packing meals' },
-      { url: IMAGES.foodDrives.image3, alt: 'Community meal service' },
-      { url: IMAGES.foodDrives.image4, alt: 'Food donation collection' },
-    ],
+    images: foodDrivesImages,
     statistics: [
       { label: 'Meals Distributed', value: '1K+' },
       { label: 'Cities Served', value: '10+' },
@@ -88,12 +123,7 @@ export default async function Home() {
     title: 'Sanskriti, Shiksha, Samarthan',
     description:
       'Education is the one tool that can transform a child\'s entire future — yet thousands of young minds grow up without access to even the basics. A little guidance, a little attention, and a little consistency can change everything.\n\nOur youth-led Teaching Drives bring learning directly to children in underserved communities — from basic literacy to spoken English, from school subjects to life skills. Each session is designed to help them build confidence, curiosity, and the ability to dream beyond their circumstances.\n\nIf you\'re a student, graduate, or working professional with a passion for teaching, you can volunteer with us and become the mentor a child has been waiting for.',
-    images: [
-      { url: IMAGES.teachingDrives.image1, alt: 'Teaching session in progress' },
-      { url: IMAGES.teachingDrives.image2, alt: 'Students learning new skills' },
-      { url: IMAGES.teachingDrives.image3, alt: 'Volunteer teaching children' },
-      { url: IMAGES.teachingDrives.image4, alt: 'Classroom activity' },
-    ],
+    images: teachingDrivesImages,
     statistics: [
       { label: 'Students Taught', value: '100+' },
       { label: 'Skill Shops', value: '20+' },

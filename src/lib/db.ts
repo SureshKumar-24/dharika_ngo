@@ -158,3 +158,75 @@ export async function testConnection() {
 }
 
 export { getDb };
+
+
+/**
+ * Section Images Management
+ */
+
+export interface SectionImage {
+  id: number;
+  section_name: string;
+  image_key: string;
+  image_url: string;
+  alt_text: string | null;
+  display_order: number;
+  updated_at: Date;
+  created_at: Date;
+}
+
+export async function getSectionImages(sectionName: string): Promise<SectionImage[]> {
+  const sql = getDb();
+  try {
+    const result = await sql`
+      SELECT * FROM section_images
+      WHERE section_name = ${sectionName}
+      ORDER BY display_order ASC
+    `;
+
+    return result as SectionImage[];
+  } catch (error) {
+    console.error('Error fetching section images:', error);
+    return [];
+  }
+}
+
+export async function getAllSectionImages(): Promise<SectionImage[]> {
+  const sql = getDb();
+  try {
+    const result = await sql`
+      SELECT * FROM section_images
+      ORDER BY section_name ASC, display_order ASC
+    `;
+
+    return result as SectionImage[];
+  } catch (error) {
+    console.error('Error fetching all section images:', error);
+    return [];
+  }
+}
+
+export async function updateSectionImage(
+  id: number,
+  data: {
+    image_url?: string;
+    alt_text?: string;
+    display_order?: number;
+  }
+): Promise<void> {
+  const sql = getDb();
+  try {
+    await sql`
+      UPDATE section_images
+      SET 
+        image_url = COALESCE(${data.image_url}, image_url),
+        alt_text = COALESCE(${data.alt_text}, alt_text),
+        display_order = COALESCE(${data.display_order}, display_order),
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    console.error('Error updating section image:', error);
+    throw error;
+  }
+}

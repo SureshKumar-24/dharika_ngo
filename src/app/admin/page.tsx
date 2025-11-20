@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, X, Lock } from 'lucide-react';
 
 type Volunteer = {
   id: number;
@@ -38,6 +38,9 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -104,6 +107,23 @@ export default function AdminPage() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = currentData.slice(startIndex, endIndex);
 
+  const handleManageImagesClick = () => {
+    setShowOtpModal(true);
+    setOtp('');
+    setOtpError('');
+  };
+
+  const handleOtpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp === '2108') {
+      setShowOtpModal(false);
+      router.push('/admin/images');
+    } else {
+      setOtpError('Invalid OTP. Please try again.');
+      setOtp('');
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await fetch('/api/admin/auth', {
@@ -148,12 +168,20 @@ export default function AdminPage() {
             <h1 className="text-3xl font-bold text-maroon">Admin Dashboard</h1>
             <p className="mt-2 text-gray-600">Manage volunteers and suggestions</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-maroon text-white rounded-lg hover:bg-maroon/90 transition-colors focus:outline-none focus:ring-2 focus:ring-gold"
-          >
-            Logout
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <button
+              onClick={handleManageImagesClick}
+              className="px-5 py-2.5 bg-maroon text-white rounded-lg hover:bg-maroon/90 transition-all font-medium shadow-sm hover:shadow-md"
+            >
+              Manage Images
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-5 py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -246,6 +274,80 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+
+      {/* OTP Modal */}
+      {showOtpModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-maroon/10 rounded-full">
+                  <Lock className="w-5 h-5 text-maroon" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-maroon">Enter OTP</h2>
+                  <p className="text-sm text-gray-600 mt-1">Verification required</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowOtpModal(false)}
+                className="p-2 hover:bg-red-50 rounded-full transition-all group"
+                title="Close"
+              >
+                <X className="w-5 h-5 text-gray-600 group-hover:text-red-600 transition-colors" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <form onSubmit={handleOtpSubmit} className="p-6">
+              <div className="mb-6">
+                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-2">
+                  Enter 4-digit OTP
+                </label>
+                <input
+                  id="otp"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={otp}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setOtp(value);
+                    setOtpError('');
+                  }}
+                  className="w-full px-4 py-3 text-center text-2xl font-bold tracking-widest border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-maroon focus:border-maroon outline-none transition-all"
+                  placeholder="••••"
+                  autoFocus
+                />
+                {otpError && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                    <span>⚠️</span> {otpError}
+                  </p>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="flex flex-col-reverse sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowOtpModal(false)}
+                  className="flex-1 px-5 py-2.5 text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:border-gray-400 rounded-lg transition-all font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={otp.length !== 4}
+                  className="flex-1 px-5 py-2.5 bg-maroon text-white rounded-lg hover:bg-maroon/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-sm hover:shadow-md"
+                >
+                  Verify
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
