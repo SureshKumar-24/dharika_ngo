@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 import { getAllSectionImages, updateSectionImage } from '@/lib/db';
 
 // Check if user is authenticated
@@ -57,6 +58,9 @@ export async function PUT(request: NextRequest) {
       alt_text,
       display_order,
     });
+
+    // Revalidate the homepage to show updated images immediately
+    revalidatePath('/', 'page');
 
     return NextResponse.json(
       { success: true, message: 'Image updated successfully' },
