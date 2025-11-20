@@ -11,7 +11,7 @@ export const IMAGES = {
 
   // Food Drives Images
   foodDrives: {
-    image1: `${CLOUDINARY_BASE_URL}/v1763573392/Dharika/gallery/iuuzz6g2mrboothcou0z.jpg`,
+    image1: 'https://res.cloudinary.com/dsr89dej0/image/upload/v1763639656/Dharika/gallery/dtaq1fx9bvbcrjrngbg1.jpg',
     image2: `${CLOUDINARY_BASE_URL}/v1763573388/Dharika/gallery/xxm7p9tpc6hrje6phuze.jpg`,
     image3: `${CLOUDINARY_BASE_URL}/v1763573391/Dharika/gallery/lf4cjqhztn9svqnwjcwj.jpg`,
     image4: `${CLOUDINARY_BASE_URL}/v1763573389/Dharika/gallery/lbedrmmfeoq9kdvjbhck.jpg`,

@@ -32,7 +32,7 @@ export const NAVIGATION_SECTIONS = [
 ] as const;
 
 export const SOCIAL_LINKS = {
-  instagram: 'https://www.instagram.com/dharika.co/',
+  instagram: 'https://www.instagram.com/dharika.in',
   linkedin: 'https://www.linkedin.com/in/siya-sethi-a2439a301',
   whatsapp: 'https://wa.me/919876543210',
   telegram: 'https://t.me/dharika',
