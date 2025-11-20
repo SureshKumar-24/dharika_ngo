@@ -65,15 +65,15 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="max-w-4xl mx-auto mb-12"
+              className="max-w-4xl mx-auto mb-12 px-4"
             >
-              <h3 className="text-2xl md:text-3xl font-bold text-maroon mb-2">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-maroon mb-2">
                 {philosophy.sanskrit}
               </h3>
-              <p className="text-xl md:text-2xl text-gray-600 italic mb-6">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-600 italic mb-6">
                 "{philosophy.translation}"
               </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
                 {philosophy.description}
               </p>
             </motion.div>

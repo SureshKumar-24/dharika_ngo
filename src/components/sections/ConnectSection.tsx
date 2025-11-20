@@ -270,31 +270,11 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
             </div>
           </div>
 
-          {/* Footer Links */}
+          {/* Footer */}
           <div className="border-t border-white/20 pt-8">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-white/80 text-sm text-center sm:text-left">
-                © {new Date().getFullYear()} Dharika. All rights reserved.
-              </p>
-              <div className="flex gap-4 sm:gap-6 text-sm">
-                <a
-                  href={socialLinks.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/80 hover:text-gold transition-colors"
-                >
-                  WhatsApp
-                </a>
-                <a
-                  href={socialLinks.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/80 hover:text-gold transition-colors"
-                >
-                  Telegram
-                </a>
-              </div>
-            </div>
+            <p className="text-white/80 text-sm text-center">
+              © {new Date().getFullYear()} Dharika. All rights reserved.
+            </p>
           </div>
         </Container>
       </Section>

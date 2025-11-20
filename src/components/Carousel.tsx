@@ -125,11 +125,11 @@ export const Carousel: React.FC<CarouselProps> = ({
                 {/* Content Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                    <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                       {slide.title}
                     </h2>
                     {slide.subtitle && (
-                      <p className="text-lg md:text-xl lg:text-2xl text-white/90 mb-6 drop-shadow-md max-w-3xl mx-auto">
+                      <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 drop-shadow-md max-w-3xl mx-auto px-4">
                         {slide.subtitle}
                       </p>
                     )}

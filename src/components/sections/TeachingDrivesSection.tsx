@@ -71,22 +71,26 @@ export const TeachingDrivesSection: React.FC<TeachingDrivesSectionProps> = ({
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="space-y-6 md:order-2"
               >
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  {description}
-                </p>
+                <div className="space-y-4">
+                  {description.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className="text-gray-700 leading-relaxed text-lg">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
 
                 {/* Statistics */}
                 {statistics && statistics.length > 0 && (
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-8">
+                  <div className="grid grid-cols-2 gap-4 mt-8">
                     {statistics.map((stat, index) => (
                       <div
                         key={index}
-                        className="bg-white rounded-lg p-3 sm:p-4 text-center shadow-sm"
+                        className="bg-white rounded-lg p-4 sm:p-6 text-center shadow-sm"
                       >
-                        <div className="text-2xl sm:text-3xl font-bold text-maroon mb-1">
+                        <div className="text-3xl sm:text-4xl font-bold text-maroon mb-2">
                           {stat.value}
                         </div>
-                        <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
+                        <div className="text-sm sm:text-base text-gray-600">{stat.label}</div>
                       </div>
                     ))}
                   </div>

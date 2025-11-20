@@ -68,7 +68,7 @@ export default async function Home() {
   const foodDrivesData = {
     title: 'Because No Child Should Sleep Hungry',
     description:
-      'Millions in India struggle to secure even one proper meal a day — especially children. A simple plate of food restores energy, dignity, and the ability to learn, grow, and live like any other child their age. At Dharika, our youth-led drives ensure fresh, nourishing meals reach the ones who need them most. And along with preparing food, we also redirect surplus meals from cafeterias, caterers, and local kitchens — because what becomes "waste" for one can be a lifeline for another. If you\'re a café, restaurant, or kitchen owner willing to contribute your surplus, you can sign up to be connected directly with the children who need it most.',
+      'Millions in India struggle to secure even one proper meal a day — especially children. A simple plate of food restores energy, dignity, and the ability to learn, grow, and live like any other child their age.\n\nAt Dharika, our youth-led drives ensure fresh, nourishing meals reach the ones who need them most. And along with preparing food, we also redirect surplus meals from cafeterias, caterers, and local kitchens — because what becomes "waste" for one can be a lifeline for another.\n\nIf you\'re a café, restaurant, or kitchen owner willing to contribute your surplus, you can sign up to be connected directly with the children who need it most.',
     images: [
       { url: IMAGES.foodDrives.image1, alt: 'Food distribution event' },
       { url: IMAGES.foodDrives.image2, alt: 'Volunteers packing meals' },
@@ -84,7 +84,7 @@ export default async function Home() {
   const teachingDrivesData = {
     title: 'Sanskriti, Shiksha, Samarthan',
     description:
-      'Education is the one tool that can transform a child\'s entire future — yet thousands of young minds grow up without access to even the basics. A little guidance, a little attention, and a little consistency can change everything. Our youth-led Teaching Drives bring learning directly to children in underserved communities— from basic literacy to spoken English, from school subjects to life skills. Each session is designed to help them build confidence, curiosity, and the ability to dream beyond their circumstances. If you\'re a student, graduate, or working professional with a passion for teaching, you can volunteer with us and become the mentor a child has been waiting for.',
+      'Education is the one tool that can transform a child\'s entire future — yet thousands of young minds grow up without access to even the basics. A little guidance, a little attention, and a little consistency can change everything.\n\nOur youth-led Teaching Drives bring learning directly to children in underserved communities — from basic literacy to spoken English, from school subjects to life skills. Each session is designed to help them build confidence, curiosity, and the ability to dream beyond their circumstances.\n\nIf you\'re a student, graduate, or working professional with a passion for teaching, you can volunteer with us and become the mentor a child has been waiting for.',
     images: [
       { url: IMAGES.teachingDrives.image1, alt: 'Teaching session in progress' },
       { url: IMAGES.teachingDrives.image2, alt: 'Students learning new skills' },

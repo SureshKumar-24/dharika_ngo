@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { NAVIGATION_SECTIONS } from '@/lib/constants';
+import { NAVIGATION_SECTIONS, SITE_CONFIG } from '@/lib/constants';
 
 export interface NavigationProps {
   sections?: Array<{
@@ -86,10 +87,18 @@ export const Navigation: React.FC<NavigationProps> = ({
             {/* Logo/Brand */}
             <button
               onClick={() => scrollToSection('hero')}
-              className="text-xl font-bold text-maroon focus:outline-none focus:ring-2 focus:ring-gold rounded"
+              className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-gold rounded-lg p-1"
               aria-label="Dharika home"
             >
-              Dharika
+              <Image
+                src={SITE_CONFIG.logo}
+                alt="Dharika Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+                priority
+              />
+              <span className="text-xl font-bold text-maroon">Dharika</span>
             </button>
 
             {/* Desktop Navigation */}
@@ -160,7 +169,16 @@ export const Navigation: React.FC<NavigationProps> = ({
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                  <span className="text-lg font-bold text-maroon">Menu</span>
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={SITE_CONFIG.logo}
+                      alt="Dharika Logo"
+                      width={32}
+                      height={32}
+                      className="object-contain"
+                    />
+                    <span className="text-lg font-bold text-maroon">Menu</span>
+                  </div>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
                     className="p-2 rounded-lg text-foreground hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold"

@@ -73,22 +73,6 @@ export async function POST(request: NextRequest) {
       availability: result.data.availability,
     });
 
-    // Also save to Google Sheets (non-blocking)
-    try {
-      const { appendVolunteerData } = await import('@/lib/googleSheets');
-      await appendVolunteerData({
-        name: result.data.name,
-        phone: result.data.phone,
-        email: result.data.email,
-        city: result.data.city,
-        interest: result.data.interest,
-        availability: result.data.availability,
-      });
-    } catch (sheetsError) {
-      console.error('Failed to sync to Google Sheets:', sheetsError);
-      // Continue anyway - database save was successful
-    }
-
     return NextResponse.json(
       { 
         success: true, 
