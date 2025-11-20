@@ -106,8 +106,8 @@ export const Carousel: React.FC<CarouselProps> = ({
                     className="object-cover object-center"
                     priority={slide.order === 1}
                     loading={slide.order === 1 ? 'eager' : 'lazy'}
-                    quality={85}
-                    sizes="100vw"
+                    quality={75}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                   />
                 ) : (
                   <video

@@ -59,8 +59,8 @@ export const TeachingDrivesSection: React.FC<TeachingDrivesSectionProps> = ({
                       fill
                       className="object-cover hover:scale-105 transition-transform duration-300"
                       loading="lazy"
-                      quality={80}
-                      sizes="(max-width: 768px) 50vw, 25vw"
+                      quality={70}
+                      sizes="(max-width: 640px) 45vw, (max-width: 768px) 50vw, 25vw"
                     />
                   </div>
                 ))}
