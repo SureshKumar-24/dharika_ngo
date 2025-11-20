@@ -150,39 +150,39 @@ export const Carousel: React.FC<CarouselProps> = ({
         </div>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - Hidden on mobile */}
       {slides.length > 1 && (
         <>
           <button
             onClick={scrollPrev}
             disabled={!canScrollPrev}
             className={cn(
-              'absolute left-4 top-1/2 -translate-y-1/2 z-10',
-              'w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm',
-              'flex items-center justify-center',
+              'absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10',
+              'w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm',
+              'hidden sm:flex items-center justify-center',
               'transition-all hover:bg-white/30',
               'focus:outline-none focus:ring-2 focus:ring-gold',
               'disabled:opacity-50 disabled:cursor-not-allowed'
             )}
             aria-label="Previous slide"
           >
-            <ChevronLeft className="w-6 h-6 text-white" aria-hidden="true" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
           </button>
 
           <button
             onClick={scrollNext}
             disabled={!canScrollNext}
             className={cn(
-              'absolute right-4 top-1/2 -translate-y-1/2 z-10',
-              'w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm',
-              'flex items-center justify-center',
+              'absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10',
+              'w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm',
+              'hidden sm:flex items-center justify-center',
               'transition-all hover:bg-white/30',
               'focus:outline-none focus:ring-2 focus:ring-gold',
               'disabled:opacity-50 disabled:cursor-not-allowed'
             )}
             aria-label="Next slide"
           >
-            <ChevronRight className="w-6 h-6 text-white" aria-hidden="true" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
           </button>
         </>
       )}
