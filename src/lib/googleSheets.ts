@@ -28,14 +28,19 @@ export async function appendVolunteerData(
   data: Omit<VolunteerSubmission, 'timestamp' | 'source'>
 ): Promise<void> {
   try {
+    console.log('📊 [Google Sheets] Starting sync...');
     const sheetId = process.env.GOOGLE_SHEET_ID;
     
     if (!sheetId) {
-      console.warn('GOOGLE_SHEET_ID not configured, skipping Google Sheets sync');
+      console.warn('⚠️  [Google Sheets] GOOGLE_SHEET_ID not configured, skipping sync');
       return;
     }
 
+    console.log('📊 [Google Sheets] Sheet ID:', sheetId);
+    console.log('📊 [Google Sheets] Initializing client...');
     const sheets = getGoogleSheetsClient();
+    console.log('✅ [Google Sheets] Client initialized');
+    
     const timestamp = new Date().toISOString();
 
     // Prepare row data matching the column structure
@@ -49,6 +54,7 @@ export async function appendVolunteerData(
       timestamp,
     ];
 
+    console.log('📊 [Google Sheets] Appending row:', row);
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
       range: 'Volunteer List!A:G',
@@ -58,9 +64,21 @@ export async function appendVolunteerData(
       },
     });
 
-    console.log('Volunteer data appended successfully to Google Sheets');
+    console.log('✅ [Google Sheets] Volunteer data appended successfully');
   } catch (error) {
-    console.error('Error appending volunteer data to Google Sheets:', error);
+    console.error('❌ [Google Sheets] Error appending volunteer data:', error);
+    if (error instanceof Error) {
+      console.error('❌ [Google Sheets] Error details:', {
+        message: error.message,
+        name: error.name,
+      });
+    }
+    if (error && typeof error === 'object') {
+      console.error('❌ [Google Sheets] Additional error info:', {
+        code: (error as any).code,
+        status: (error as any).status,
+      });
+    }
     // Don't throw error - allow the request to succeed even if Sheets fails
   }
 }

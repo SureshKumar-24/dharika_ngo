@@ -97,7 +97,19 @@ export async function POST(request: NextRequest) {
       availability: result.data.availability,
     });
 
+    // Debug: Log environment variables status
+    console.log('=== Environment Variables Check ===');
+    console.log('GOOGLE_SHEET_ID:', process.env.GOOGLE_SHEET_ID ? '✅ Set' : '❌ Missing');
+    console.log('GOOGLE_SERVICE_ACCOUNT_EMAIL:', process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? '✅ Set' : '❌ Missing');
+    console.log('GOOGLE_PRIVATE_KEY:', process.env.GOOGLE_PRIVATE_KEY ? '✅ Set (length: ' + process.env.GOOGLE_PRIVATE_KEY.length + ')' : '❌ Missing');
+    console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? '✅ Set' : '❌ Missing');
+    console.log('EMAIL_FROM:', process.env.EMAIL_FROM || '❌ Missing');
+    console.log('ADMIN_EMAIL_TO:', process.env.ADMIN_EMAIL_TO || '❌ Missing');
+    console.log('ADMIN_EMAIL_CC:', process.env.ADMIN_EMAIL_CC || '(not set)');
+    console.log('===================================');
+
     // Also append to Google Sheets (non-blocking)
+    console.log('📊 Attempting to sync to Google Sheets...');
     appendVolunteerData({
       name: result.data.name,
       phone: result.data.phone,
@@ -105,17 +117,33 @@ export async function POST(request: NextRequest) {
       city: result.data.city,
       interest: result.data.interest,
       availability: result.data.availability,
+    }).then(() => {
+      console.log('✅ Google Sheets sync successful');
     }).catch((error) => {
-      console.error('Failed to sync to Google Sheets:', error);
+      console.error('❌ Failed to sync to Google Sheets:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+      });
       // Don't fail the request if Sheets sync fails
     });
 
     // Send notification email to admin only (non-blocking)
+    console.log('📧 Attempting to send admin notification email...');
     try {
       const adminEmailTo = process.env.ADMIN_EMAIL_TO;
       const adminEmailCc = process.env.ADMIN_EMAIL_CC;
 
-      if (adminEmailTo) {
+      console.log('Email config:', {
+        from: EMAIL_FROM,
+        to: adminEmailTo,
+        cc: adminEmailCc || '(none)',
+      });
+
+      if (!adminEmailTo) {
+        console.warn('⚠️  ADMIN_EMAIL_TO not configured, skipping admin notification');
+      } else {
+        console.log('🔨 Rendering email template...');
         const adminEmailHtml = await render(
           React.createElement(AdminNotificationEmail, {
             volunteerName: result.data.name,
@@ -126,6 +154,7 @@ export async function POST(request: NextRequest) {
             availability: result.data.availability,
           })
         );
+        console.log('✅ Email template rendered successfully');
 
         const emailOptions: any = {
           from: EMAIL_FROM,
@@ -139,17 +168,26 @@ export async function POST(request: NextRequest) {
           emailOptions.cc = adminEmailCc;
         }
 
-        await resend.emails.send(emailOptions);
-
+        console.log('📤 Sending email via Resend...');
+        const emailResult = await resend.emails.send(emailOptions);
+        console.log('✅ Email sent successfully!', emailResult);
         console.log('Admin notification email sent to:', adminEmailTo);
         if (adminEmailCc) {
           console.log('CC:', adminEmailCc);
         }
-      } else {
-        console.warn('ADMIN_EMAIL_TO not configured, skipping admin notification');
       }
     } catch (error) {
-      console.error('Failed to send admin notification:', error);
+      console.error('❌ Failed to send admin notification email');
+      if (error instanceof Error) {
+        console.error('Error type:', error.constructor.name);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      } else {
+        console.error('Unknown error:', error);
+      }
+      if (error && typeof error === 'object' && 'response' in error) {
+        console.error('API Response:', (error as any).response);
+      }
       // Don't fail the request if email fails
     }
 
