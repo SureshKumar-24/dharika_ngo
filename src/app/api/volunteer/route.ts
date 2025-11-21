@@ -31,9 +31,14 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // FORCE LOG - This should ALWAYS appear
+  console.log('🚀🚀🚀 VOLUNTEER API CALLED - Build Time: 2025-01-21T18:30:00Z 🚀🚀🚀');
+  console.log('Request received at:', new Date().toISOString());
+  
   try {
     // Get client IP for rate limiting
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    console.log('Client IP:', ip);
 
     // Check rate limit
     if (!checkRateLimit(ip)) {
@@ -211,8 +216,17 @@ export async function POST(request: NextRequest) {
 
 // Handle other HTTP methods
 export async function GET() {
+  console.log('🚀 GET request to volunteer API - Build: 2025-01-21T18:30:00Z');
   return NextResponse.json(
-    { error: 'Method not allowed' },
+    { 
+      error: 'Method not allowed',
+      debug: {
+        buildTime: '2025-01-21T18:30:00Z',
+        hasResendKey: !!process.env.RESEND_API_KEY,
+        hasGoogleSheetId: !!process.env.GOOGLE_SHEET_ID,
+        hasAdminEmail: !!process.env.ADMIN_EMAIL_TO,
+      }
+    },
     { status: 405 }
   );
 }
