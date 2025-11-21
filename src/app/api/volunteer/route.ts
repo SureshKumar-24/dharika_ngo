@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
     console.log('📧 Attempting to send admin notification email...');
     try {
       // Hardcoded admin email - no environment variable needed
-      const adminEmailTo = 'sk20012404@gmail.com';
+      const adminEmailTo = 'dharika.co@gmail.com';
       const adminEmailCc = process.env.ADMIN_EMAIL_CC;
 
       console.log('Email config:', {
