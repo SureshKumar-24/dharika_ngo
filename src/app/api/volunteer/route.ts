@@ -113,25 +113,28 @@ export async function POST(request: NextRequest) {
     console.log('ADMIN_EMAIL_CC:', process.env.ADMIN_EMAIL_CC || '(not set)');
     console.log('===================================');
 
-    // Also append to Google Sheets (non-blocking)
+    // Sync to Google Sheets (wait for completion)
     console.log('📊 Attempting to sync to Google Sheets...');
-    appendVolunteerData({
-      name: result.data.name,
-      phone: result.data.phone,
-      email: result.data.email,
-      city: result.data.city,
-      interest: result.data.interest,
-      availability: result.data.availability,
-    }).then(() => {
-      console.log('✅ Google Sheets sync successful');
-    }).catch((error) => {
-      console.error('❌ Failed to sync to Google Sheets:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
+    try {
+      await appendVolunteerData({
+        name: result.data.name,
+        phone: result.data.phone,
+        email: result.data.email,
+        city: result.data.city,
+        interest: result.data.interest,
+        availability: result.data.availability,
       });
-      // Don't fail the request if Sheets sync fails
-    });
+      console.log('✅ Google Sheets sync completed successfully');
+    } catch (error) {
+      console.error('❌ Failed to sync to Google Sheets:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+        });
+      }
+      // Don't fail the request if Sheets sync fails - continue anyway
+    }
 
     // Send notification email to admin only (non-blocking)
     console.log('📧 Attempting to send admin notification email...');
