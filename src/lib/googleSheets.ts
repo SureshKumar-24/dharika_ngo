@@ -41,7 +41,18 @@ export async function appendVolunteerData(
     const sheets = getGoogleSheetsClient();
     console.log('✅ [Google Sheets] Client initialized');
     
-    const timestamp = new Date().toISOString();
+    // Format timestamp in Indian format: DD/MM/YYYY HH:MM:SS
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Kolkata'
+    });
 
     // Prepare row data matching the column structure
     const row = [
@@ -59,6 +70,7 @@ export async function appendVolunteerData(
       spreadsheetId: sheetId,
       range: 'Volunteer List!A:G',
       valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [row],
       },
@@ -98,7 +110,19 @@ export async function appendSuggestionData(
     }
 
     const sheets = getGoogleSheetsClient();
-    const timestamp = new Date().toISOString();
+    
+    // Format timestamp in Indian format: DD/MM/YYYY HH:MM:SS
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Kolkata'
+    });
 
     // Prepare row data matching the column structure
     const row = [
@@ -113,6 +137,7 @@ export async function appendSuggestionData(
       spreadsheetId: sheetId,
       range: 'Suggestions!A:E',
       valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [row],
       },
