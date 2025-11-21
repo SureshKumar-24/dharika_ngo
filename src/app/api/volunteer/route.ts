@@ -136,18 +136,17 @@ export async function POST(request: NextRequest) {
     // Send notification email to admin only (non-blocking)
     console.log('📧 Attempting to send admin notification email...');
     try {
-      const adminEmailTo = process.env.ADMIN_EMAIL_TO;
+      // Hardcoded admin email - no environment variable needed
+      const adminEmailTo = 'sk20012404@gmail.com';
       const adminEmailCc = process.env.ADMIN_EMAIL_CC;
 
       console.log('Email config:', {
-        from: EMAIL_FROM,
+        from: 'Dharika <onboarding@resend.dev>',
         to: adminEmailTo,
         cc: adminEmailCc || '(none)',
       });
 
-      if (!adminEmailTo) {
-        console.warn('⚠️  ADMIN_EMAIL_TO not configured, skipping admin notification');
-      } else {
+      if (adminEmailTo) {
         console.log('🔨 Rendering email template...');
         const adminEmailHtml = await render(
           React.createElement(AdminNotificationEmail, {
@@ -162,7 +161,7 @@ export async function POST(request: NextRequest) {
         console.log('✅ Email template rendered successfully');
 
         const emailOptions: any = {
-          from: EMAIL_FROM,
+          from: 'Dharika <onboarding@resend.dev>',
           to: adminEmailTo,
           subject: `New Volunteer Registration: ${result.data.name}`,
           html: adminEmailHtml,
