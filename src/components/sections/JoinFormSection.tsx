@@ -100,7 +100,7 @@ export const JoinFormSection: React.FC<JoinFormSectionProps> = ({ onSubmit }) =>
 
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.message || 'Failed to submit form');
+          throw new Error(error.error || error.message || 'Failed to submit form');
         }
       }
 

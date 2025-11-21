@@ -40,19 +40,18 @@ export async function appendVolunteerData(
 
     // Prepare row data matching the column structure
     const row = [
-      timestamp,
       data.name,
       data.phone,
       data.email,
       data.city,
       data.interest,
       data.availability,
-      'website',
+      timestamp,
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: 'Volunteer List!A:H',
+      range: 'Volunteer List!A:G',
       valueInputOption: 'RAW',
       requestBody: {
         values: [row],
@@ -133,19 +132,18 @@ export async function initializeVolunteerSheet(): Promise<void> {
     const sheets = getGoogleSheetsClient();
     
     const headers = [
-      'Timestamp',
       'Name',
       'Phone',
       'Email',
       'City',
       'Interest',
       'Availability',
-      'Source',
+      'Timestamp',
     ];
 
     await sheets.spreadsheets.values.update({
       spreadsheetId: sheetId,
-      range: 'Sheet1!A1:H1',
+      range: 'Sheet1!A1:G1',
       valueInputOption: 'RAW',
       requestBody: {
         values: [headers],

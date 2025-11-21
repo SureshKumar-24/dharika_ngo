@@ -8,12 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "db:init": "tsx scripts/init-db.ts",
-    "db:test": "tsx scripts/test-db.ts"
+    "db:test": "tsx scripts/test-db.ts",
+    "sheets:init": "tsx scripts/init-google-sheets.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
     "@notionhq/client": "^5.4.0",
     "@radix-ui/react-slot": "^1.2.4",
+    "@react-email/render": "^1.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
@@ -24,6 +26,7 @@
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "resend": "^6.5.2",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.12"
   },

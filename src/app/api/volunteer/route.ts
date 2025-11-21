@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { volunteerFormSchema } from '@/lib/validations';
-import { insertVolunteer } from '@/lib/db';
+import { insertVolunteer, checkVolunteerExists } from '@/lib/db';
+import { appendVolunteerData } from '@/lib/googleSheets';
+import { resend, EMAIL_FROM } from '@/lib/resend';
+import { AdminNotificationEmail } from '@/lib/email-templates';
+import { render } from '@react-email/render';
+import React from 'react';
 
 // Rate limiting map (in production, use Redis or similar)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -63,6 +68,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check for duplicate phone or email
+    const duplicate = await checkVolunteerExists(result.data.phone, result.data.email);
+
+    if (duplicate.exists) {
+      let errorMessage = '';
+      if (duplicate.field === 'both') {
+        errorMessage = 'This phone number and email are already registered by another volunteer. Please use different contact details.';
+      } else if (duplicate.field === 'phone') {
+        errorMessage = 'This phone number is already registered by another volunteer. Please use a different phone number.';
+      } else {
+        errorMessage = 'This email address is already registered by another volunteer. Please use a different email.';
+      }
+
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 409 }
+      );
+    }
+
     // Insert data into Neon database
     const dbResult = await insertVolunteer({
       name: result.data.name,
@@ -72,6 +96,62 @@ export async function POST(request: NextRequest) {
       interest: result.data.interest,
       availability: result.data.availability,
     });
+
+    // Also append to Google Sheets (non-blocking)
+    appendVolunteerData({
+      name: result.data.name,
+      phone: result.data.phone,
+      email: result.data.email,
+      city: result.data.city,
+      interest: result.data.interest,
+      availability: result.data.availability,
+    }).catch((error) => {
+      console.error('Failed to sync to Google Sheets:', error);
+      // Don't fail the request if Sheets sync fails
+    });
+
+    // Send notification email to admin only (non-blocking)
+    try {
+      const adminEmailTo = process.env.ADMIN_EMAIL_TO;
+      const adminEmailCc = process.env.ADMIN_EMAIL_CC;
+
+      if (adminEmailTo) {
+        const adminEmailHtml = await render(
+          React.createElement(AdminNotificationEmail, {
+            volunteerName: result.data.name,
+            phone: result.data.phone,
+            email: result.data.email,
+            city: result.data.city,
+            interest: result.data.interest,
+            availability: result.data.availability,
+          })
+        );
+
+        const emailOptions: any = {
+          from: EMAIL_FROM,
+          to: adminEmailTo,
+          subject: `New Volunteer Registration: ${result.data.name}`,
+          html: adminEmailHtml,
+        };
+
+        // Add CC if provided
+        if (adminEmailCc && adminEmailCc.trim()) {
+          emailOptions.cc = adminEmailCc;
+        }
+
+        await resend.emails.send(emailOptions);
+
+        console.log('Admin notification email sent to:', adminEmailTo);
+        if (adminEmailCc) {
+          console.log('CC:', adminEmailCc);
+        }
+      } else {
+        console.warn('ADMIN_EMAIL_TO not configured, skipping admin notification');
+      }
+    } catch (error) {
+      console.error('Failed to send admin notification:', error);
+      // Don't fail the request if email fails
+    }
 
     return NextResponse.json(
       { 

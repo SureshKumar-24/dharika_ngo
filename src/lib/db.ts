@@ -56,6 +56,36 @@ export async function initializeDatabase() {
 }
 
 /**
+ * Check if volunteer already exists by phone or email
+ */
+export async function checkVolunteerExists(phone: string, email: string) {
+  const sql = getDb();
+  try {
+    const result = await sql`
+      SELECT id, phone, email FROM volunteers
+      WHERE phone = ${phone} OR email = ${email}
+      LIMIT 1
+    ` as Array<{ id: number; phone: string; email: string }>;
+
+    if (result.length > 0) {
+      const existing = result[0];
+      if (existing.phone === phone && existing.email === email) {
+        return { exists: true, field: 'both' };
+      } else if (existing.phone === phone) {
+        return { exists: true, field: 'phone' };
+      } else {
+        return { exists: true, field: 'email' };
+      }
+    }
+
+    return { exists: false, field: null };
+  } catch (error) {
+    console.error('Error checking volunteer existence:', error);
+    throw error;
+  }
+}
+
+/**
  * Insert volunteer data into database
  */
 export async function insertVolunteer(data: {
