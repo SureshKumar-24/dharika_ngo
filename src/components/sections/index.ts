@@ -22,3 +22,9 @@ export type { JoinFormSectionProps } from './JoinFormSection';
 
 export { ConnectSection } from './ConnectSection';
 export type { ConnectSectionProps } from './ConnectSection';
+
+export { StudentSupportSection } from './StudentSupportSection';
+export type { StudentSupportSectionProps } from './StudentSupportSection';
+
+export { FoodRescueSection } from './FoodRescueSection';
+export type { FoodRescueSectionProps } from './FoodRescueSection';

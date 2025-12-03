@@ -26,6 +26,8 @@ export const NAVIGATION_SECTIONS = [
   { id: 'about', label: 'About' },
   { id: 'food-drives', label: 'Food Drives' },
   { id: 'teaching', label: 'Teaching' },
+  { id: 'student-support', label: 'Student Support' },
+  { id: 'food-alerts', label: 'Donate Surplus Food' },
   { id: 'stories', label: 'Stories' },
   { id: 'join', label: 'Join' },
   { id: 'connect', label: 'Connect' },

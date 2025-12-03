@@ -176,6 +176,12 @@ export default function AdminPage() {
               Manage Images
             </button>
             <button
+              onClick={() => router.push('/admin/resources')}
+              className="px-5 py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium"
+            >
+              Admin Resources
+            </button>
+            <button
               onClick={handleLogout}
               className="px-5 py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium"
             >

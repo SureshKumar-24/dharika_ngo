@@ -132,12 +132,14 @@ export function getMockCarouselSlides(): CarouselSlide[] {
   return [
     {
       id: 'hero-1',
-      title: 'Every Child Deserves a Window to the World',
-      subtitle: 'A single opportunity can shape a lifetime. Your support helps open that window.',
+      title:
+        "Now offering digital learning support and India's first youth-driven food rescue network.",
+      subtitle:
+        'From micro-learning videos for students to redirecting safe surplus meals — one platform, two impact engines.',
       mediaUrl: 'https://res.cloudinary.com/dsr89dej0/image/upload/v1763637288/Dharika/gallery/vd61u4egy7yevpn4e3jh.jpg',
       mediaType: 'image',
-      ctaText: 'Get Involved',
-      ctaLink: '#join',
+      ctaText: 'Explore New Initiatives',
+      ctaLink: '#student-support',
       order: 1,
     },
     {

@@ -62,6 +62,135 @@ export const suggestionFormSchema = z.object({
 
 export type SuggestionFormInput = z.infer<typeof suggestionFormSchema>;
 
+// Student Support – Micro-learning query form
+export const studentQueryFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must not exceed 100 characters')
+    .trim(),
+  age: z
+    .string()
+    .regex(/^\d{1,2}$/, 'Please enter a valid age')
+    .optional()
+    .or(z.literal('')),
+  city: z
+    .string()
+    .min(2, 'City is required')
+    .max(100, 'City name must not exceed 100 characters')
+    .trim(),
+  locality: z
+    .string()
+    .min(2, 'Locality is required')
+    .max(100, 'Locality must not exceed 100 characters')
+    .trim(),
+  studentClass: z.enum(
+    [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+    ],
+    { message: 'Please select a class between 1 and 12' }
+  ),
+  subject: z.enum(['maths', 'english', 'hindi', 'science', 'other'], {
+    message: 'Please select a subject',
+  }),
+  topic: z
+    .string()
+    .min(5, 'Please describe your topic or question (at least 5 characters)')
+    .max(500, 'Topic description must not exceed 500 characters')
+    .trim(),
+  phone: z
+    .string()
+    .regex(/^[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian phone number'),
+  email: z
+    .string()
+    .email('Please enter a valid email address')
+    .toLowerCase()
+    .trim(),
+  attendingOfflineClasses: z.enum(['yes', 'no']),
+  honeypot: z.string().optional(),
+});
+
+export type StudentQueryFormInput = z.infer<typeof studentQueryFormSchema>;
+
+// Food Rescue – Surplus food alert form
+export const foodAlertFormSchema = z.object({
+  donorType: z.enum(['restaurant', 'cafe', 'caterer', 'individual'], {
+    message: 'Please select a donor type',
+  }),
+  establishmentName: z
+    .string()
+    .min(2, 'Establishment name is required')
+    .max(150, 'Establishment name must not exceed 150 characters')
+    .trim(),
+  contactPersonName: z
+    .string()
+    .min(2, 'Contact person name is required')
+    .max(100, 'Name must not exceed 100 characters')
+    .trim(),
+  phone: z
+    .string()
+    .regex(/^[6-9]\d{9}$/, 'Please enter a valid 10-digit Indian phone number'),
+  address: z
+    .string()
+    .min(5, 'Address is required')
+    .max(300, 'Address must not exceed 300 characters')
+    .trim(),
+  city: z
+    .string()
+    .min(2, 'City is required')
+    .max(100, 'City name must not exceed 100 characters')
+    .trim(),
+  quantity: z
+    .string()
+    .min(1, 'Please mention approximate quantity')
+    .max(100, 'Quantity description is too long')
+    .trim(),
+  preparedAt: z
+    .string()
+    .min(1, 'Please specify time of preparation')
+    .trim(),
+  expiryEstimate: z.enum(
+    ['2_hours', '4_hours', '6_hours', '8_hours', 'same_day'],
+    {
+      message: 'Please select an expiry estimate',
+    }
+  ),
+  photoUrl: z
+    .string()
+    .url('Please enter a valid URL for the photo')
+    .optional()
+    .or(z.literal('')),
+  declarationTodayPrepared: z.literal(true, {
+    errorMap: () => ({
+      message: 'Please confirm the food was prepared today',
+    }),
+  }),
+  declarationHygienic: z.literal(true, {
+    errorMap: () => ({
+      message: 'Please confirm the food is stored hygienically',
+    }),
+  }),
+  declarationSafe: z.literal(true, {
+    errorMap: () => ({
+      message: 'Please confirm the food is safe for consumption',
+    }),
+  }),
+  honeypot: z.string().optional(),
+});
+
+export type FoodAlertFormInput = z.infer<typeof foodAlertFormSchema>;
+
 /**
  * Helper function to validate form data and return formatted errors
  */

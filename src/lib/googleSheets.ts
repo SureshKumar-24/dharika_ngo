@@ -1,5 +1,10 @@
 import { google } from 'googleapis';
-import type { VolunteerSubmission, SuggestionSubmission } from '@/types/forms';
+import type {
+  VolunteerSubmission,
+  SuggestionSubmission,
+  StudentQuerySubmission,
+  FoodAlertSubmission,
+} from '@/types/forms';
 
 /**
  * Initialize Google Sheets API client
@@ -151,6 +156,132 @@ export async function appendSuggestionData(
   } catch (error) {
     console.error('Error appending suggestion data to Google Sheets:', error);
     // Don't throw error - allow the request to succeed even if Sheets fails
+  }
+}
+
+/**
+ * Append student query data to Google Sheets ("Student Queries" sheet)
+ */
+export async function appendStudentQueryData(
+  data: Omit<StudentQuerySubmission, 'timestamp' | 'source'>
+): Promise<void> {
+  try {
+    const sheetId = process.env.GOOGLE_SHEET_ID_STUDENT_QUERIES;
+
+    if (!sheetId) {
+      console.warn(
+        '⚠️  [Google Sheets] GOOGLE_SHEET_ID_STUDENT_QUERIES not configured, skipping sync'
+      );
+      return;
+    }
+
+    const sheets = getGoogleSheetsClient();
+
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Kolkata',
+    });
+
+    // Match actual sheet structure: Timestamp, Name, Age, City, Subject, Topic, Phone, Email, Attending Offline Classes, Source
+    // Note: Locality and Class are combined into City and Subject for now
+    // If you add separate columns, update this mapping
+    const row = [
+      timestamp,
+      data.name,
+      data.age || '',
+      `${data.city}${data.locality ? `, ${data.locality}` : ''}`, // Combine city + locality
+      `${data.studentClass} - ${data.subject}`, // Combine class and subject
+      data.topic,
+      data.phone,
+      data.email,
+      data.attendingOfflineClasses,
+      'website',
+    ];
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId,
+      range: 'Student Queries!A:J',
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      requestBody: {
+        values: [row],
+      },
+    });
+
+    console.log('✅ [Google Sheets] Student query data appended successfully');
+  } catch (error) {
+    console.error('❌ [Google Sheets] Error appending student query data:', error);
+  }
+}
+
+/**
+ * Append food alert data to Google Sheets ("Food Rescue Alerts" sheet)
+ */
+export async function appendFoodAlertData(
+  data: Omit<FoodAlertSubmission, 'timestamp' | 'source' | 'status'>
+): Promise<void> {
+  try {
+    const sheetId = process.env.GOOGLE_SHEET_ID_FOOD_ALERTS;
+
+    if (!sheetId) {
+      console.warn(
+        '⚠️  [Google Sheets] GOOGLE_SHEET_ID_FOOD_ALERTS not configured, skipping sync'
+      );
+      return;
+    }
+
+    const sheets = getGoogleSheetsClient();
+
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Kolkata',
+    });
+
+    const row = [
+      timestamp,
+      data.donorType,
+      data.establishmentName,
+      data.contactPersonName,
+      data.phone,
+      data.address,
+      data.city,
+      data.quantity,
+      data.preparedAt,
+      data.expiryEstimate,
+      data.photoUrl || '',
+      'pending',
+      data.pickupPhotoUrl || '',
+      data.deliveryPhotoUrl || '',
+      'website',
+    ];
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: sheetId,
+      range: 'Food Rescue Alerts!A:O',
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      requestBody: {
+        values: [row],
+      },
+    });
+
+    console.log('✅ [Google Sheets] Food alert data appended successfully');
+  } catch (error) {
+    console.error('❌ [Google Sheets] Error appending food alert data:', error);
   }
 }
 

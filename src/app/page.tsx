@@ -5,6 +5,8 @@ import {
   FoodDrivesSection,
   TeachingDrivesSection,
   TestimonialsSection,
+  StudentSupportSection,
+  FoodRescueSection,
   JoinFormSection,
   ConnectSection,
 } from '@/components/sections';
@@ -146,6 +148,8 @@ export default async function Home() {
         <AboutSection {...aboutData} />
         <FoodDrivesSection {...foodDrivesData} />
         <TeachingDrivesSection {...teachingDrivesData} />
+        <StudentSupportSection />
+        <FoodRescueSection />
         <TestimonialsSection testimonials={testimonials} />
         <JoinFormSection />
         <ConnectSection

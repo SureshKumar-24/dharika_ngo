@@ -1,0 +1,30 @@
+# ============================================
+# ADD THESE TO YOUR .env FILE (or Vercel Environment Variables)
+# ============================================
+
+# Student Queries Sheet
+GOOGLE_SHEET_ID_STUDENT_QUERIES=14ejx6FNQz8lcniq1TT8zymRN04ALYDSUh4AIGypgrkw
+STUDENT_QUERIES_SHEET_URL="https://docs.google.com/spreadsheets/d/14ejx6FNQz8lcniq1TT8zymRN04ALYDSUh4AIGypgrkw/edit?usp=sharing"
+NEXT_PUBLIC_STUDENT_QUERIES_SHEET_URL="https://docs.google.com/spreadsheets/d/14ejx6FNQz8lcniq1TT8zymRN04ALYDSUh4AIGypgrkw/edit?usp=sharing"
+
+# Food Rescue Alerts Sheet
+GOOGLE_SHEET_ID_FOOD_ALERTS=1nIwNirQkNYOrhPWucPbc4vjtnLbNS99szdfZZwkhG7M
+FOOD_ALERTS_SHEET_URL="https://docs.google.com/spreadsheets/d/1nIwNirQkNYOrhPWucPbc4vjtnLbNS99szdfZZwkhG7M/edit?usp=sharing"
+NEXT_PUBLIC_FOOD_ALERTS_SHEET_URL="https://docs.google.com/spreadsheets/d/1nIwNirQkNYOrhPWucPbc4vjtnLbNS99szdfZZwkhG7M/edit?usp=sharing"
+
+# WhatsApp Meta Business API
+WHATSAPP_ACCESS_TOKEN=EAAsVnUntmmoBQLTuubwWeRZCAXxWIfyEZAT3W1LM5ZCAluotISikaPc1z4vEVu56VCZCjkJGkZBcIrVBDdP53gRxe0S0GFbX1KSKXDbD3wage0Q5AcFWogjjLeH7S0P4cPiMSCTRzIILZArxxdZAF9wsbwXxvzRjhkV7dGGuK8b8kgy5vsYC5qbyaFMBZCLsNpaIHmiodrbeKZAvEbKGIvZAheapO39zrFG06MYDpJ2jQ8KLXboiTAMj9jZBwEGUDRXyp9QNFtPo3DCOfx4NHxuagXslQoBRmgeUcjkIJzJ5gZDZD
+WHATSAPP_PHONE_NUMBER_ID=825831047291534
+WHATSAPP_ADMIN_NUMBER=+15551753908
+
+# Admin Resources - Volunteer Group Links (REPLACE WITH YOUR ACTUAL LINKS)
+NEXT_PUBLIC_VOLUNTEER_GROUP_STUDENT_SUPPORT_URL="https://chat.whatsapp.com/YOUR_TEACHER_GROUP_LINK"
+NEXT_PUBLIC_VOLUNTEER_GROUP_FOOD_RESCUE_URL="https://chat.whatsapp.com/YOUR_FOOD_VOLUNTEER_GROUP_LINK"
+
+# ============================================
+# NOTES:
+# ============================================
+# 1. Replace YOUR_TEACHER_GROUP_LINK and YOUR_FOOD_VOLUNTEER_GROUP_LINK with actual WhatsApp group invite links
+# 2. WHATSAPP_ADMIN_NUMBER: Use +15551753908 for testing, or replace with your real coordinator number in E.164 format (e.g., +91XXXXXXXXXX)
+# 3. For production, update WHATSAPP_ADMIN_NUMBER to your actual coordinator WhatsApp number
+

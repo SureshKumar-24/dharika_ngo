@@ -275,6 +275,11 @@ export const ConnectSection: React.FC<ConnectSectionProps> = ({
             <p className="text-white/80 text-sm text-center">
               © {new Date().getFullYear()} Dharika. All rights reserved.
             </p>
+            <p className="text-white/80 text-xs text-center mt-2">
+              We currently do not collect monetary donations through this website. All
+              initiatives are coordinated via volunteers, learning support, and food
+              redirection only.
+            </p>
           </div>
         </Container>
       </Section>

@@ -416,3 +416,164 @@ const adminStyles = {
     color: '#ffffff',
   },
 };
+
+// Student Support – acknowledgement email to student
+interface StudentQueryReceivedEmailProps {
+  name: string;
+  subjectLabel: string;
+  topic: string;
+}
+
+export const StudentQueryReceivedEmail: React.FC<StudentQueryReceivedEmailProps> = ({
+  name,
+  subjectLabel,
+  topic,
+}) => {
+  return (
+    <html>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body style={styles.body}>
+        <table style={styles.container} cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={styles.header}>
+              <img
+                src="https://res.cloudinary.com/dsr89dej0/image/upload/v1763573431/Dharika/gallery/lwmwyjpwq7palbz94s2c.png"
+                alt="Dharika Logo"
+                style={styles.logo}
+              />
+              <h1 style={styles.logoText}>DHARIKA</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={styles.content}>
+              <h2 style={styles.heading}>We’ve received your learning question 🎓</h2>
+
+              <p style={styles.text}>Dear {name},</p>
+
+              <p style={styles.text}>
+                Thank you for reaching out to Dharika&apos;s Student Support. We&apos;ve received
+                your query on <strong>{subjectLabel}</strong>:
+              </p>
+
+              <div style={styles.infoBox}>
+                <p style={styles.infoTitle}>Your Question:</p>
+                <p style={styles.text}>{topic}</p>
+              </div>
+
+              <p style={styles.text}>
+                Our volunteer teachers will now review your query. You will receive a video solution
+                within <strong>12 hours</strong>.
+              </p>
+
+              <p style={styles.text}>
+                If this topic already exists on our YouTube channel, you may receive a video link
+                much sooner.
+              </p>
+
+              <p style={styles.text}>
+                Please keep an eye on your email and WhatsApp for the video link. Thank you for
+                choosing to learn with us. 🌱
+              </p>
+
+              <p style={styles.signature}>
+                With warmth,<br />
+                <strong>Dharika Student Support Team</strong>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={styles.footer}>
+              <p style={styles.footerText}>
+                © {new Date().getFullYear()} Dharika. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  );
+};
+
+// Student Support – resolution email with YouTube link
+interface StudentQueryResolvedEmailProps {
+  name: string;
+  topic: string;
+  videoUrl: string;
+}
+
+export const StudentQueryResolvedEmail: React.FC<StudentQueryResolvedEmailProps> = ({
+  name,
+  topic,
+  videoUrl,
+}) => {
+  return (
+    <html>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body style={styles.body}>
+        <table style={styles.container} cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={styles.header}>
+              <img
+                src="https://res.cloudinary.com/dsr89dej0/image/upload/v1763573431/Dharika/gallery/lwmwyjpwq7palbz94s2c.png"
+                alt="Dharika Logo"
+                style={styles.logo}
+              />
+              <h1 style={styles.logoText}>DHARIKA</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={styles.content}>
+              <h2 style={styles.heading}>Your learning video is ready! 📽️</h2>
+
+              <p style={styles.text}>Dear {name},</p>
+
+              <p style={yles.text}>
+                Our teacher volunteers have created a video to help you with the following topic:
+              </p>
+
+              <div style={styles.infoBox}>
+                <p style={styles.infoTitle}>Topic Solved:</p>
+                <p style={styles.text}>{topic}</p>
+              </div>
+
+              <p style={styles.text}>You can watch your video lesson here:</p>
+
+              <div style={styles.ctaContainer}>
+                <a href={videoUrl} style={styles.button}>
+                  Watch Video on YouTube
+                </a>
+              </div>
+
+              <p style={styles.text}>
+                Feel free to pause, rewind, and rewatch as many times as you like. If you still have
+                doubts after watching, you can always submit a follow-up question.
+              </p>
+
+              <p style={styles.signature}>
+                With care,<br />
+                <strong>Dharika Student Support Team</strong>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={styles.footer}>
+              <p style={styles.footerText}>
+                © {new Date().getFullYear()} Dharika. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  );
+};
