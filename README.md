@@ -410,6 +410,17 @@ This project is open-source under the [MIT License](LICENSE).
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
+
+- How to set up the development environment
+- Code style and commit message format
+- How to submit pull requests
+- Reporting bugs and suggesting features
+
+---
+
 ## 📞 Contact
 
 - **Email**: dharika.co@gmail.com
