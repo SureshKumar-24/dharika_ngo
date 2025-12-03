@@ -1,381 +1,371 @@
-# Dharika NGO Website
+# 🌍 Dharika - Technology for Social Transformation
 
-A modern, mobile-first website for Dharika's social initiatives - food drives and teaching drives across India.
+<div align="center">
 
-## Tech Stack
+![Dharika Logo](public/dharika-logo.png)
 
-- **Framework**: Next.js 16 with App Router
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4
-- **Animation**: Framer Motion
-- **CMS**: Notion API
-- **Data Storage**: Google Sheets API
-- **Validation**: Zod
-- **Carousel**: Embla Carousel React
-- **Icons**: Lucide React
+**वसुधैव कुटुम्बकम् — The World is One Family**
 
-## Features
+*A youth-led digital platform connecting volunteers with underserved communities through food drives and teaching initiatives across India.*
 
-- ✅ Responsive, mobile-first design
-- ✅ Dynamic carousel with Notion CMS integration
-- ✅ Cloudinary image hosting with centralized configuration
-- ✅ Smooth scroll navigation with active section highlighting
-- ✅ Volunteer and suggestion forms with validation
-- ✅ Google Sheets integration for form submissions
-- ✅ Spam protection with honeypot fields and rate limiting
-- ✅ Accessibility compliant (WCAG 2.1 AA)
-- ✅ SEO optimized
-- ✅ Incremental Static Regeneration (ISR)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Getting Started
+[Live Demo](https://dharika.org) • [Video Demo](#demonstration-video) • [Documentation](#documentation)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [Problem Statement](#-problem-statement)
+- [Our Solution](#-our-solution)
+- [Key Features](#-key-features)
+- [Technology Stack](#-technology-stack)
+- [Architecture](#-architecture)
+- [Impact & Scalability](#-impact--scalability)
+- [Getting Started](#-getting-started)
+- [Team](#-team)
+- [UN SDG Alignment](#-un-sdg-alignment)
+- [Future Roadmap](#-future-roadmap)
+- [License](#-license)
+
+---
+
+## 🎯 Problem Statement
+
+### The Challenge
+
+India faces critical challenges in two interconnected areas:
+
+**1. Food Insecurity**
+- Over **190 million** Indians are undernourished (FAO, 2023)
+- **40%** of food produced in India is wasted annually
+- Children in underserved communities often go to bed hungry while surplus food from restaurants and events goes to waste
+
+**2. Educational Inequality**
+- **32 million** children in India are out of school
+- Rural and underserved communities lack access to quality education
+- Limited platforms exist to connect willing volunteers with children who need mentorship
+
+### The Gap
+
+While there are millions of young Indians willing to volunteer, there's no unified, accessible platform that:
+- Connects volunteers directly with communities in need
+- Manages food surplus redistribution efficiently
+- Organizes teaching drives with proper volunteer management
+- Tracks impact and ensures accountability
+
+---
+
+## 💡 Our Solution
+
+**Dharika** is a comprehensive digital platform that bridges the gap between willing volunteers and underserved communities through:
+
+### 🍽️ Food Drives Initiative
+- **Surplus Food Redistribution**: Connects restaurants, cafeterias, and event organizers with communities in need
+- **Volunteer Coordination**: Enables youth to organize and participate in food distribution drives
+- **Real-time Tracking**: Monitors meals distributed and communities served
+
+### 📚 Teaching Drives Initiative
+- **Volunteer Matching**: Connects students and professionals with children needing mentorship
+- **Skill-based Sessions**: From basic literacy to spoken English, school subjects to life skills
+- **Progress Tracking**: Monitors student progress and volunteer engagement
+
+### 🔗 Unified Platform Features
+- **Mobile-First Design**: Accessible on any device, optimized for low-bandwidth areas
+- **Multi-language Support**: Designed for scalability across Indian languages
+- **Admin Dashboard**: For NGO coordinators to manage volunteers and track impact
+- **Automated Notifications**: Email confirmations and updates for volunteers
+
+---
+
+## ✨ Key Features
+
+| Feature | Description | Technology |
+|---------|-------------|------------|
+| **Responsive Design** | Mobile-first, works on all devices | Tailwind CSS 4 |
+| **Dynamic Content** | CMS-powered carousel and testimonials | Notion API |
+| **Volunteer Registration** | Validated forms with spam protection | Zod + Honeypot |
+| **Data Management** | Secure storage of volunteer data | Google Sheets API |
+| **Email Notifications** | Automated confirmation emails | Resend API |
+| **Admin Panel** | Manage images, volunteers, suggestions | Next.js App Router |
+| **Performance Optimized** | ISR, image optimization, caching | Next.js 16 |
+| **Accessibility** | WCAG 2.1 AA compliant | Semantic HTML |
+| **SEO Optimized** | Sitemap, robots.txt, meta tags | Next.js Metadata |
+| **Analytics** | Track user engagement | Vercel Analytics |
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+```
+├── Next.js 16          # React framework with App Router
+├── TypeScript 5        # Type-safe development
+├── Tailwind CSS 4      # Utility-first styling
+├── Framer Motion       # Smooth animations
+└── Embla Carousel      # Touch-friendly carousels
+```
+
+### Backend & APIs
+```
+├── Next.js API Routes  # Serverless functions
+├── Notion API          # Headless CMS
+├── Google Sheets API   # Data storage
+├── Resend              # Transactional emails
+└── Zod                 # Schema validation
+```
+
+### Infrastructure
+```
+├── Vercel              # Hosting & deployment
+├── Cloudinary          # Image CDN
+├── Neon Database       # PostgreSQL (optional)
+└── GitHub Actions      # CI/CD
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      CLIENT (Browser)                        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │   Mobile    │  │   Desktop   │  │   Admin Dashboard   │  │
+│  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
+└─────────┼────────────────┼────────────────────┼─────────────┘
+          │                │                    │
+          ▼                ▼                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    NEXT.JS APPLICATION                       │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                   App Router                         │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────────────┐   │    │
+│  │  │  Pages   │  │   API    │  │   Middleware     │   │    │
+│  │  │ (SSR/ISR)│  │  Routes  │  │ (Rate Limiting)  │   │    │
+│  │  └──────────┘  └──────────┘  └──────────────────┘   │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+          │                │                    │
+          ▼                ▼                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    EXTERNAL SERVICES                         │
+│  ┌──────────┐  ┌──────────────┐  ┌──────────────────────┐   │
+│  │  Notion  │  │ Google Sheets│  │       Resend         │   │
+│  │   CMS    │  │   Database   │  │   Email Service      │   │
+│  └──────────┘  └──────────────┘  └──────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Project Structure
+
+```
+dharika/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API endpoints
+│   │   │   ├── volunteer/     # Volunteer registration
+│   │   │   ├── suggestion/    # Feedback submission
+│   │   │   └── admin/         # Admin operations
+│   │   ├── admin/             # Admin dashboard
+│   │   └── page.tsx           # Main landing page
+│   ├── components/
+│   │   ├── sections/          # Page sections (Hero, About, etc.)
+│   │   ├── ui/                # Reusable UI components
+│   │   └── admin/             # Admin-specific components
+│   ├── lib/
+│   │   ├── notion.ts          # Notion API integration
+│   │   ├── googleSheets.ts    # Google Sheets integration
+│   │   ├── resend.ts          # Email service
+│   │   └── validations.ts     # Zod schemas
+│   └── types/                 # TypeScript definitions
+├── public/                    # Static assets
+└── scripts/                   # Utility scripts
+```
+
+---
+
+## 📊 Impact & Scalability
+
+### Current Impact
+
+| Metric | Value |
+|--------|-------|
+| 🍽️ Meals Distributed | **1,000+** |
+| 🏙️ Cities Served | **10+** |
+| 👨‍🎓 Students Taught | **100+** |
+| 🎓 Skill Workshops | **20+** |
+
+### Scalability Plan
+
+1. **Regional Expansion**
+   - Multi-language support (Hindi, Tamil, Bengali, etc.)
+   - State-specific volunteer networks
+   - Local NGO partnerships
+
+2. **Technical Scalability**
+   - Serverless architecture handles traffic spikes
+   - CDN-optimized images for fast loading
+   - Database sharding for large datasets
+
+3. **Feature Expansion**
+   - Mobile app (React Native)
+   - Real-time volunteer tracking
+   - AI-powered volunteer-community matching
+   - Impact analytics dashboard
+
+### Sustainability Model
+
+- **Zero Cost for Beneficiaries**: Platform is free for communities
+- **Volunteer-Driven**: No paid staff for ground operations
+- **Open Source**: Community contributions welcome
+- **Partnership Model**: Collaborate with existing NGOs and CSR initiatives
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
 - Notion account (for CMS)
 - Google Cloud account (for Sheets API)
+- Resend account (for emails)
 
 ### Installation
 
-1. Clone the repository:
 ```bash
-git clone <repository-url>
+# Clone the repository
+git clone https://github.com/your-username/dharika.git
 cd dharika
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Set up environment variables:
-```bash
+# Set up environment variables
 cp .env.example .env.local
-```
+# Edit .env.local with your credentials
 
-Edit `.env.local` and add your credentials:
-- Notion API key and database IDs
-- Google Service Account credentials
-- Revalidation secret
-
-### Development
-
-Run the development server:
-```bash
+# Run development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the website.
+### Environment Variables
 
-### Build
+```env
+# Notion CMS
+NOTION_API_KEY=your_notion_api_key
+NOTION_CAROUSEL_DB_ID=your_carousel_database_id
+NOTION_TESTIMONIALS_DB_ID=your_testimonials_database_id
 
-Build for production:
-```bash
-npm run build
+# Google Sheets
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your_service_account@project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+GOOGLE_SHEET_ID_VOLUNTEER=your_volunteer_sheet_id
+GOOGLE_SHEET_ID_SUGGESTION=your_suggestion_sheet_id
+
+# Email (Resend)
+RESEND_API_KEY=your_resend_api_key
+
+# Security
+REVALIDATE_SECRET=your_revalidation_secret
+ADMIN_PASSWORD=your_admin_password
 ```
 
-Start production server:
+### Build & Deploy
+
 ```bash
+# Build for production
+npm run build
+
+# Start production server
 npm start
 ```
 
-## Project Structure
+---
 
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── api/               # API routes
-│   │   ├── volunteer/     # Volunteer form submission
-│   │   └── suggestion/    # Suggestion form submission
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/
-│   ├── sections/          # Page sections
-│   │   ├── HeroSection.tsx
-│   │   ├── AboutSection.tsx
-│   │   ├── FoodDrivesSection.tsx
-│   │   ├── TeachingDrivesSection.tsx
-│   │   ├── TestimonialsSection.tsx
-│   │   ├── JoinFormSection.tsx
-│   │   └── ConnectSection.tsx
-│   ├── ui/                # Reusable UI components
-│   ├── Navigation.tsx     # Sticky navigation
-│   └── Carousel.tsx       # Hero carousel
-├── lib/
-│   ├── notion.ts          # Notion API client
-│   ├── googleSheets.ts    # Google Sheets API
-│   ├── validations.ts     # Zod schemas
-│   ├── utils.ts           # Utility functions
-│   └── constants.ts       # App constants
-└── types/                 # TypeScript types
-```
+## 👥 Team
 
-## ISR and Revalidation
+| Role | Name | Expertise |
+|------|------|-----------|
+| **Team Lead** | [Name] | Full-Stack Development |
+| **Member 2** | [Name] | UI/UX Design |
+| **Member 3** | [Name] | Social Sciences / Community Outreach |
 
-The website uses on-demand revalidation via webhook. When content is updated in Notion, trigger revalidation by calling:
+---
 
-```bash
-POST https://your-domain.com/api/revalidate?secret=YOUR_SECRET
-```
+## 🌐 UN SDG Alignment
 
-Optional body to revalidate specific paths:
-```json
-{
-  "paths": ["/", "/#about"]
-}
-```
+This project directly contributes to the following UN Sustainable Development Goals:
 
-## Configuration
+| SDG | Goal | Our Contribution |
+|-----|------|------------------|
+| ![SDG 1](https://img.shields.io/badge/SDG%201-No%20Poverty-E5243B) | No Poverty | Supporting underserved communities |
+| ![SDG 2](https://img.shields.io/badge/SDG%202-Zero%20Hunger-DDA63A) | Zero Hunger | Food drives and surplus redistribution |
+| ![SDG 4](https://img.shields.io/badge/SDG%204-Quality%20Education-C5192D) | Quality Education | Teaching drives for children |
+| ![SDG 10](https://img.shields.io/badge/SDG%2010-Reduced%20Inequalities-DD1367) | Reduced Inequalities | Bridging urban-rural divide |
+| ![SDG 12](https://img.shields.io/badge/SDG%2012-Responsible%20Consumption-BF8B2E) | Responsible Consumption | Reducing food waste |
+| ![SDG 17](https://img.shields.io/badge/SDG%2017-Partnerships-19486A) | Partnerships | Connecting volunteers with communities |
 
-### Image Management
+---
 
-All images are hosted on Cloudinary and centrally managed in `src/lib/images.ts`. 
+## 🗺️ Future Roadmap
 
-To update images:
-1. Upload new images to Cloudinary (`Dharika/gallery` folder)
-2. Update URLs in `src/lib/images.ts`
-3. Rebuild and deploy
+### Phase 1 (Q1 2026)
+- [ ] Mobile application launch
+- [ ] Multi-language support (5 Indian languages)
+- [ ] Real-time volunteer tracking
 
-See [IMAGE_MANAGEMENT.md](./IMAGE_MANAGEMENT.md) for detailed instructions.
+### Phase 2 (Q2 2026)
+- [ ] AI-powered volunteer matching
+- [ ] Impact analytics dashboard
+- [ ] Integration with government schemes
 
-### Notion CMS Setup
+### Phase 3 (Q3 2026)
+- [ ] Pan-India expansion (all 36 states/UTs)
+- [ ] Corporate volunteer programs
+- [ ] Gamification for volunteer engagement
 
-1. Create a Notion integration at https://www.notion.so/my-integrations
-2. Create databases for:
-   - Carousel slides (Title, Media URL, Media Type, CTA Text, CTA Link, Order, Published)
-   - Testimonials (Quote, Name, Role, Order, Published)
-3. Share databases with your integration
-4. Add database IDs to `.env.local`
+---
 
-### Google Sheets Setup
+---
 
-1. Create a Google Cloud project
-2. Enable Google Sheets API
-3. Create a service account and download credentials
-4. Create two Google Sheets (Volunteers, Suggestions)
-5. Share sheets with service account email
-6. Add credentials to `.env.local`
+## 🎥 Demonstration Video
 
-## Environment Variables
+[Watch our 3-5 minute demo video showcasing the platform](https://youtube.com/your-demo-video)
 
-See `.env.example` for all required environment variables:
+---
 
-- `NOTION_API_KEY` - Notion integration secret
-- `NOTION_CAROUSEL_DB_ID` - Carousel database ID
-- `NOTION_TESTIMONIALS_DB_ID` - Testimonials database ID
-- `GOOGLE_SERVICE_ACCOUNT_EMAIL` - Service account email
-- `GOOGLE_PRIVATE_KEY` - Service account private key
-- `GOOGLE_SHEET_ID_VOLUNTEER` - Volunteer sheet ID
-- `GOOGLE_SHEET_ID_SUGGESTION` - Suggestion sheet ID
-- `REVALIDATE_SECRET` - Secret for webhook revalidation
+## 📜 License
 
-## Deployment
+This project is open-source under the [MIT License](LICENSE).
 
-### Pre-deployment Checklist
+---
 
-- [ ] All environment variables configured
-- [ ] Notion databases set up and shared
-- [ ] Google Sheets created and shared with service account
-- [ ] Test forms locally
-- [ ] Run production build locally (`npm run build`)
-- [ ] Test production build (`npm start`)
-- [ ] Run Lighthouse audit
-- [ ] Update domain in metadata (layout.tsx, sitemap.ts, robots.ts)
-- [ ] Set up Google Search Console verification
+## 🤝 Contributing
 
-### Vercel (Recommended)
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-1. **Push to GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-repo-url>
-   git push -u origin main
-   ```
+---
 
-2. **Import to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Select the repository
+## 📞 Contact
 
-3. **Configure Environment Variables**
-   Add all variables from `.env.example`:
-   - `NOTION_API_KEY`
-   - `NOTION_CAROUSEL_DB_ID`
-   - `NOTION_TESTIMONIALS_DB_ID`
-   - `GOOGLE_SERVICE_ACCOUNT_EMAIL`
-   - `GOOGLE_PRIVATE_KEY`
-   - `GOOGLE_SHEET_ID_VOLUNTEER`
-   - `GOOGLE_SHEET_ID_SUGGESTION`
-   - `REVALIDATE_SECRET`
+- **Email**: Dharika.co@gmail.com
+- **Location**: Ambala City, 134004, Haryana, India
+- **Instagram**: [@dharika.in](https://www.instagram.com/dharika.in)
+- **LinkedIn**: [Dharika](https://www.linkedin.com/in/siya-sethi-a2439a301)
 
-4. **Deploy**
-   - Click "Deploy"
-   - Wait for build to complete
-   - Visit your deployed site
+---
 
-5. **Set Up Custom Domain** (Optional)
-   - Go to Project Settings > Domains
-   - Add your custom domain
-   - Update DNS records as instructed
-   - Update domain in code (layout.tsx, sitemap.ts, robots.ts)
+<div align="center">
 
-6. **Configure Notion Webhook**
-   - In Notion, set up webhook to trigger on content updates
-   - Point to: `https://your-domain.com/api/revalidate?secret=YOUR_SECRET`
-   - Test webhook by updating content
+**Built with ❤️ for Viksit Bharat 2047**
 
-### Netlify
+*Think Global, Hack Local — Technology for Social Transformation*
 
-1. **Build Settings**
-   ```
-   Build command: npm run build
-   Publish directory: .next
-   ```
-
-2. **Environment Variables**
-   - Add all variables from `.env.example` in Netlify dashboard
-
-3. **Deploy**
-   - Connect GitHub repository
-   - Configure build settings
-   - Deploy
-
-### AWS Amplify
-
-1. **Connect Repository**
-   - Connect GitHub repository
-   - Select branch
-
-2. **Build Settings**
-   ```yaml
-   version: 1
-   frontend:
-     phases:
-       preBuild:
-         commands:
-           - npm ci
-       build:
-         commands:
-           - npm run build
-     artifacts:
-       baseDirectory: .next
-       files:
-         - '**/*'
-     cache:
-       paths:
-         - node_modules/**/*
-   ```
-
-3. **Environment Variables**
-   - Add all variables in Amplify console
-
-### Self-Hosted with Docker
-
-1. **Create Dockerfile**
-   ```dockerfile
-   FROM node:18-alpine AS base
-   
-   FROM base AS deps
-   RUN apk add --no-cache libc6-compat
-   WORKDIR /app
-   COPY package*.json ./
-   RUN npm ci
-   
-   FROM base AS builder
-   WORKDIR /app
-   COPY --from=deps /app/node_modules ./node_modules
-   COPY . .
-   RUN npm run build
-   
-   FROM base AS runner
-   WORKDIR /app
-   ENV NODE_ENV production
-   RUN addgroup --system --gid 1001 nodejs
-   RUN adduser --system --uid 1001 nextjs
-   COPY --from=builder /app/public ./public
-   COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-   COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-   USER nextjs
-   EXPOSE 3000
-   ENV PORT 3000
-   CMD ["node", "server.js"]
-   ```
-
-2. **Build and Run**
-   ```bash
-   docker build -t dharika-website .
-   docker run -p 3000:3000 --env-file .env.local dharika-website
-   ```
-
-### Post-Deployment
-
-1. **Verify Deployment**
-   - Test all pages and sections
-   - Test form submissions
-   - Verify Google Sheets integration
-   - Test Notion content updates
-   - Check revalidation webhook
-
-2. **Set Up Monitoring**
-   - Enable Vercel Analytics
-   - Set up error tracking (Sentry)
-   - Configure uptime monitoring
-
-3. **SEO Setup**
-   - Submit sitemap to Google Search Console
-   - Verify site ownership
-   - Request indexing
-   - Set up Google Analytics (optional)
-
-4. **Performance Testing**
-   - Run Lighthouse audit on production
-   - Test on real devices
-   - Monitor Core Web Vitals
-
-### Troubleshooting
-
-**Build Fails**
-- Check Node.js version (18+)
-- Verify all dependencies installed
-- Check for TypeScript errors
-- Review build logs
-
-**Environment Variables Not Working**
-- Verify variable names match exactly
-- Check for typos in values
-- Ensure no trailing spaces
-- Restart deployment after changes
-
-**Forms Not Submitting**
-- Verify Google Sheets credentials
-- Check API route logs
-- Test rate limiting
-- Verify honeypot field
-
-**Notion Content Not Updating**
-- Check Notion API key
-- Verify database IDs
-- Test revalidation webhook
-- Check database permissions
-
-### Other Platforms
-
-The app can be deployed to any platform that supports Next.js:
-- Railway
-- Render
-- DigitalOcean App Platform
-- Heroku (with buildpack)
-
-## License
-
-© 2024 Dharika. All rights reserved.
-
-## Contact
-
-- Email: hello@dharika.org
-- Location: Mumbai, India
-- Instagram: [@dharika](https://instagram.com/dharika)
-- LinkedIn: [Dharika](https://linkedin.com/company/dharika)
+</div>
