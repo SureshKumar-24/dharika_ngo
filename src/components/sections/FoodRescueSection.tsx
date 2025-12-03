@@ -184,8 +184,8 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                     label="Donor Type"
                     required
                     value={formData.donorType}
-                    onChange={(value) =>
-                      handleChange('donorType', value as FoodAlertFormInput['donorType'])
+                    onChange={(e) =>
+                      handleChange('donorType', e.target.value as FoodAlertFormInput['donorType'])
                     }
                     error={errors.donorType}
                     options={[
@@ -284,10 +284,10 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                     label="Safe Consumption Window"
                     required
                     value={formData.expiryEstimate}
-                    onChange={(value) =>
+                    onChange={(e) =>
                       handleChange(
                         'expiryEstimate',
-                        value as FoodAlertFormInput['expiryEstimate']
+                        e.target.value as FoodAlertFormInput['expiryEstimate']
                       )
                     }
                     error={errors.expiryEstimate}
@@ -440,7 +440,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 className="w-full sm:w-1/2"
                 onClick={() => setShowLiabilityNote(false)}
               >

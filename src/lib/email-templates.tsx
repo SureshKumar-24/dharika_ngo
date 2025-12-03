@@ -536,7 +536,7 @@ export const StudentQueryResolvedEmail: React.FC<StudentQueryResolvedEmailProps>
 
               <p style={styles.text}>Dear {name},</p>
 
-              <p style={yles.text}>
+              <p style={styles.text}>
                 Our teacher volunteers have created a video to help you with the following topic:
               </p>
 

@@ -171,20 +171,14 @@ export const foodAlertFormSchema = z.object({
     .url('Please enter a valid URL for the photo')
     .optional()
     .or(z.literal('')),
-  declarationTodayPrepared: z.literal(true, {
-    errorMap: () => ({
-      message: 'Please confirm the food was prepared today',
-    }),
+  declarationTodayPrepared: z.boolean().refine((val) => val === true, {
+    message: 'Please confirm the food was prepared today',
   }),
-  declarationHygienic: z.literal(true, {
-    errorMap: () => ({
-      message: 'Please confirm the food is stored hygienically',
-    }),
+  declarationHygienic: z.boolean().refine((val) => val === true, {
+    message: 'Please confirm the food is stored hygienically',
   }),
-  declarationSafe: z.literal(true, {
-    errorMap: () => ({
-      message: 'Please confirm the food is safe for consumption',
-    }),
+  declarationSafe: z.boolean().refine((val) => val === true, {
+    message: 'Please confirm the food is safe for consumption',
   }),
   honeypot: z.string().optional(),
 });

@@ -210,7 +210,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                     label="Class"
                     required
                     value={formData.studentClass}
-                    onChange={(value) => handleChange('studentClass', value)}
+                    onChange={(e) => handleChange('studentClass', e.target.value)}
                     error={errors.studentClass}
                     options={Array.from({ length: 12 }, (_, i) => {
                       const cls = (i + 1).toString();
@@ -222,7 +222,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                     label="Subject"
                     required
                     value={formData.subject}
-                    onChange={(value) => handleChange('subject', value)}
+                    onChange={(e) => handleChange('subject', e.target.value)}
                     error={errors.subject}
                     options={[
                       { value: 'maths', label: 'Maths' },
