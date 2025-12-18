@@ -5,7 +5,7 @@ import { Section, Container } from '@/components/ui/Section';
 import { GoldDivider } from '@/components/ui/GoldDivider';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { Select } from '@/components/ui/Select';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { Button } from '@/components/ui/Button';
 import { foodAlertFormSchema, type FoodAlertFormInput } from '@/lib/validations';
 import type { FoodAlertFormData } from '@/types/forms';
@@ -183,7 +183,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg">
               <form key={formKey} onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Select
+                  <CustomSelect
                     name="donorType"
                     label="Donor Type"
                     required
@@ -284,7 +284,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                     onChange={(e) => handleChange('preparedAt', e.target.value)}
                     error={errors.preparedAt}
                   />
-                  <Select
+                  <CustomSelect
                     name="expiryEstimate"
                     label="Safe Consumption Window"
                     required

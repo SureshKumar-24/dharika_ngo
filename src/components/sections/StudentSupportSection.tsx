@@ -5,7 +5,7 @@ import { Section, Container } from '@/components/ui/Section';
 import { GoldDivider } from '@/components/ui/GoldDivider';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { Select } from '@/components/ui/Select';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { Button } from '@/components/ui/Button';
 import {
   studentQueryFormSchema,
@@ -210,7 +210,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Select
+                  <CustomSelect
                     name="studentClass"
                     label="Class"
                     required
@@ -225,7 +225,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                       })
                     ]}
                   />
-                  <Select
+                  <CustomSelect
                     name="subject"
                     label="Subject"
                     required
