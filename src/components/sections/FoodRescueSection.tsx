@@ -437,42 +437,114 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
       </Section>
 
       {showLiabilityNote && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-4">
-          <div className="max-w-lg w-full bg-white rounded-2xl p-6 md:p-8 shadow-xl">
-            <div className="flex items-start gap-3 mb-4">
-              <AlertTriangle className="w-6 h-6 text-amber-600 mt-1" />
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-1">
-                  Important Responsibility Note
-                </h3>
-                <p className="text-sm text-gray-700">
-                  By submitting this form, you confirm that all details shared are true to the best
-                  of your knowledge. Providing false information may lead to blacklisting from the
-                  program and, in serious cases, may be reported to relevant authorities.
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in-0 duration-200"
+          onClick={() => setShowLiabilityNote(false)}
+        >
+          <div 
+            className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header with gradient background */}
+            <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-t-2xl p-6 md:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <AlertTriangle className="w-6 h-6 text-amber-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                    Important Responsibility Note
+                  </h3>
+                  <p className="text-amber-50 text-sm">
+                    Please read carefully before proceeding
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 md:p-8 space-y-6">
+              {/* English Section */}
+              <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4">
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                  Declaration of Truthfulness
+                </h4>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  By submitting this form, you confirm that all details shared are <strong>true to the best
+                  of your knowledge</strong>. Providing false information may lead to:
                 </p>
-                <p className="text-sm text-gray-700 mt-2">
-                  कृपया केवल वही भोजन दान करें जो आज तैयार हुआ हो, साफ-सुथरा रखा गया हो और खाने के
-                  लिए सुरक्षित हो।
+                <ul className="mt-2 ml-4 space-y-1 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-1">•</span>
+                    <span>Blacklisting from the food donation program</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-1">•</span>
+                    <span>Reporting to relevant authorities in serious cases</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Hindi Section */}
+              <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-4">
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  सत्यता की घोषणा
+                </h4>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  कृपया केवल वही भोजन दान करें जो:
+                </p>
+                <ul className="mt-2 ml-4 space-y-1 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span><strong>आज तैयार हुआ हो</strong> (पुराना नहीं)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span><strong>साफ-सुथरा रखा गया हो</strong> (स्वच्छ कंटेनर में)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span><strong>खाने के लिए सुरक्षित हो</strong> (ताज़ा और स्वस्थ)</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Important Note */}
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-xs text-red-800 leading-relaxed">
+                  <strong>⚠️ Note:</strong> This food will be served to children and families in need. 
+                  Your honesty ensures their safety and health. Thank you for your responsibility.
                 </p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 mt-4">
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full sm:w-1/2"
-                onClick={() => setShowLiabilityNote(false)}
-              >
-                Go Back
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                className="w-full sm:w-1/2"
-                onClick={handleAcceptLiability}
-              >
-                I Understand & Confirm
-              </Button>
+
+            {/* Footer with buttons */}
+            <div className="bg-gray-50 rounded-b-2xl p-6 md:p-8 border-t border-gray-200">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  className="w-full sm:w-1/2 border-2"
+                  onClick={() => setShowLiabilityNote(false)}
+                >
+                  Go Back
+                </Button>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="lg"
+                  className="w-full sm:w-1/2 shadow-lg hover:shadow-xl"
+                  onClick={handleAcceptLiability}
+                >
+                  I Understand & Confirm
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500 text-center mt-4">
+                By clicking confirm, you agree to the terms stated above
+              </p>
             </div>
           </div>
         </div>
