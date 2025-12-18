@@ -463,9 +463,9 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             </div>
 
             {/* Content */}
-            <div className="p-5 md:p-6 lg:p-8 space-y-4 max-h-[60vh] md:max-h-none overflow-y-auto">
+            <div className="p-5 md:p-6 lg:p-8 space-y-4 max-h-[60vh] md:max-h-none overflow-y-auto bg-cream">
               {/* English Section */}
-              <div className="border-l-4 border-gold bg-gray-50 rounded-r-lg p-4">
+              <div className="border-l-4 border-gold bg-white rounded-r-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-2 text-sm md:text-base">
                   Declaration of Truthfulness
                 </h4>
@@ -480,7 +480,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
               </div>
 
               {/* Hindi Section */}
-              <div className="border-l-4 border-maroon bg-gray-50 rounded-r-lg p-4">
+              <div className="border-l-4 border-maroon bg-white rounded-r-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-2 text-sm md:text-base">
                   सत्यता की घोषणा
                 </h4>
@@ -508,7 +508,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="bg-gray-50 rounded-b-xl md:rounded-b-2xl p-5 md:p-6 border-t">
+            <div className="bg-cream rounded-b-xl md:rounded-b-2xl p-5 md:p-6 border-t border-gray-200">
               <div className="flex flex-col-reverse sm:flex-row gap-3">
                 <Button
                   type="button"
