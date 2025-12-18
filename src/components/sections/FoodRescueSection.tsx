@@ -21,7 +21,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
   onSubmit,
 }) => {
   const [formData, setFormData] = useState<FoodAlertFormInput>({
-    donorType: 'restaurant',
+    donorType: '',
     establishmentName: '',
     contactPersonName: '',
     phone: '',
@@ -29,7 +29,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
     city: '',
     quantity: '',
     preparedAt: '',
-    expiryEstimate: 'same_day',
+    expiryEstimate: '',
     photoUrl: '',
     declarationTodayPrepared: false,
     declarationHygienic: false,
@@ -41,6 +41,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [showLiabilityNote, setShowLiabilityNote] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
   const handleChange = (field: keyof FoodAlertFormInput, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -81,7 +82,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
       setTimeout(() => {
         setStatus('idle');
         setFormData({
-          donorType: 'restaurant',
+          donorType: '',
           establishmentName: '',
           contactPersonName: '',
           phone: '',
@@ -89,7 +90,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
           city: '',
           quantity: '',
           preparedAt: '',
-          expiryEstimate: 'same_day',
+          expiryEstimate: '',
           photoUrl: '',
           declarationTodayPrepared: false,
           declarationHygienic: false,
@@ -123,7 +124,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
       setErrors({});
       setErrorMessage('');
       setFormData({
-        donorType: 'restaurant',
+        donorType: '',
         establishmentName: '',
         contactPersonName: '',
         phone: '',
@@ -131,7 +132,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
         city: '',
         quantity: '',
         preparedAt: '',
-        expiryEstimate: 'same_day',
+        expiryEstimate: '',
         photoUrl: '',
         declarationTodayPrepared: false,
         declarationHygienic: false,
@@ -139,6 +140,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
         honeypot: '',
       });
       setShowLiabilityNote(false);
+      setFormKey((prev) => prev + 1); // Force re-render of form
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
       setStatus('error');
@@ -179,7 +181,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             </div>
 
             <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form key={formKey} onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <Select
                     name="donorType"
@@ -191,6 +193,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                     }
                     error={errors.donorType}
                     options={[
+                      { value: '', label: 'Select donor type' },
                       { value: 'restaurant', label: 'Restaurant' },
                       { value: 'cafe', label: 'Café' },
                       { value: 'caterer', label: 'Caterer' },
@@ -294,6 +297,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                     }
                     error={errors.expiryEstimate}
                     options={[
+                      { value: '', label: 'Select consumption window' },
                       { value: '2_hours', label: '2 hours' },
                       { value: '4_hours', label: '4 hours' },
                       { value: '6_hours', label: '6 hours' },

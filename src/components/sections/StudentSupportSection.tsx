@@ -28,8 +28,8 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
     age: '',
     city: '',
     locality: '',
-    studentClass: '6',
-    subject: 'maths',
+    studentClass: '',
+    subject: '',
     topic: '',
     phone: '',
     email: '',
@@ -40,6 +40,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [formKey, setFormKey] = useState(0);
 
   const handleChange = (field: keyof StudentQueryFormInput, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -78,14 +79,15 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
           age: '',
           city: '',
           locality: '',
-          studentClass: '6',
-          subject: 'maths',
+          studentClass: '',
+          subject: '',
           topic: '',
           phone: '',
           email: '',
           attendingOfflineClasses: 'no',
           honeypot: '',
         });
+        setFormKey((prev) => prev + 1);
       }, 3000);
       return;
     }
@@ -116,14 +118,15 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
         age: '',
         city: '',
         locality: '',
-        studentClass: '6',
-        subject: 'maths',
+        studentClass: '',
+        subject: '',
         topic: '',
         phone: '',
         email: '',
         attendingOfflineClasses: 'no',
         honeypot: '',
       });
+      setFormKey((prev) => prev + 1); // Force re-render of form
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
       setStatus('error');
@@ -160,7 +163,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
             </div>
 
             <div className="bg-white rounded-2xl p-6 md:p-10 shadow-lg">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form key={formKey} onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <Input
                     type="text"
@@ -214,10 +217,13 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                     value={formData.studentClass}
                     onChange={(e) => handleChange('studentClass', e.target.value)}
                     error={errors.studentClass}
-                    options={Array.from({ length: 12 }, (_, i) => {
-                      const cls = (i + 1).toString();
-                      return { value: cls, label: `Class ${cls}` };
-                    })}
+                    options={[
+                      { value: '', label: 'Select class' },
+                      ...Array.from({ length: 12 }, (_, i) => {
+                        const cls = (i + 1).toString();
+                        return { value: cls, label: `Class ${cls}` };
+                      })
+                    ]}
                   />
                   <Select
                     name="subject"
@@ -227,6 +233,7 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                     onChange={(e) => handleChange('subject', e.target.value)}
                     error={errors.subject}
                     options={[
+                      { value: '', label: 'Select subject' },
                       { value: 'maths', label: 'Maths' },
                       { value: 'english', label: 'English' },
                       { value: 'hindi', label: 'Hindi' },
