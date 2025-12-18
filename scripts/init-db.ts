@@ -25,6 +25,8 @@ async function main() {
   console.log('\nTables created:');
   console.log('  - volunteers');
   console.log('  - suggestions');
+  console.log('  - student_queries');
+  console.log('  - food_alerts');
 }
 
 main().catch((error) => {

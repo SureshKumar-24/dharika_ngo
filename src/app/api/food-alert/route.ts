@@ -62,7 +62,27 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
-    // 1) Append to Google Sheets
+    // 1) Save to database
+    try {
+      const { insertFoodAlert } = await import('@/lib/db');
+      await insertFoodAlert({
+        donorType: data.donorType,
+        establishmentName: data.establishmentName,
+        contactPersonName: data.contactPersonName,
+        phone: data.phone,
+        address: data.address,
+        city: data.city,
+        quantity: data.quantity,
+        preparedAt: data.preparedAt,
+        expiryEstimate: data.expiryEstimate,
+        photoUrl: data.photoUrl,
+      });
+    } catch (dbError) {
+      console.error('❌ Failed to save food alert to database:', dbError);
+      // Continue even if database save fails
+    }
+
+    // 2) Append to Google Sheets
     await appendFoodAlertData({
       donorType: data.donorType,
       establishmentName: data.establishmentName,
@@ -78,7 +98,7 @@ export async function POST(request: NextRequest) {
       deliveryPhotoUrl: '',
     });
 
-    // 2) Fire-and-forget WhatsApp alert for admin / coordinator
+    // 3) Fire-and-forget WhatsApp alert for admin / coordinator
     void sendFoodAlertNotification({
       donorName: data.contactPersonName,
       establishment: data.establishmentName,

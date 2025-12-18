@@ -66,7 +66,27 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
-    // 1) Append to Google Sheets
+    // 1) Save to database
+    try {
+      const { insertStudentQuery } = await import('@/lib/db');
+      await insertStudentQuery({
+        name: data.name,
+        age: data.age,
+        city: data.city,
+        locality: data.locality,
+        studentClass: data.studentClass,
+        subject: data.subject,
+        topic: data.topic,
+        phone: data.phone,
+        email: data.email,
+        attendingOfflineClasses: data.attendingOfflineClasses,
+      });
+    } catch (dbError) {
+      console.error('❌ Failed to save student query to database:', dbError);
+      // Continue even if database save fails
+    }
+
+    // 2) Append to Google Sheets
     await appendStudentQueryData({
       name: data.name,
       age: data.age,
@@ -80,7 +100,7 @@ export async function POST(request: NextRequest) {
       attendingOfflineClasses: data.attendingOfflineClasses,
     });
 
-    // 2) Fire-and-forget WhatsApp alert to coordinator
+    // 3) Fire-and-forget WhatsApp alert to coordinator
     void sendStudentQueryAlert({
       name: data.name,
       studentClass: data.studentClass,
@@ -89,7 +109,7 @@ export async function POST(request: NextRequest) {
       sheetLink: process.env.STUDENT_QUERIES_SHEET_URL,
     });
 
-    // 3) Email acknowledgement to student (blocking so we can surface errors)
+    // 4) Email acknowledgement to student (blocking so we can surface errors)
     try {
       const subjectLabelMap: Record<string, string> = {
         maths: 'Maths',
