@@ -120,6 +120,8 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
       }
 
       setStatus('success');
+      setErrors({});
+      setErrorMessage('');
       setFormData({
         donorType: 'restaurant',
         establishmentName: '',

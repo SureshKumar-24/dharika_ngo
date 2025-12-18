@@ -109,6 +109,8 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
       }
 
       setStatus('success');
+      setErrors({});
+      setErrorMessage('');
       setFormData({
         name: '',
         age: '',
