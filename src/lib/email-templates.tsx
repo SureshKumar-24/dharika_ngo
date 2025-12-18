@@ -383,6 +383,12 @@ const adminStyles = {
     padding: '24px',
     margin: '24px 0',
   },
+  infoTitle: {
+    margin: '0 0 12px 0',
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#8B0000',
+  },
   infoTable: {
     width: '100%',
     borderCollapse: 'collapse' as const,
@@ -569,6 +575,287 @@ export const StudentQueryResolvedEmail: React.FC<StudentQueryResolvedEmailProps>
             <td style={styles.footer}>
               <p style={styles.footerText}>
                 © {new Date().getFullYear()} Dharika. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  );
+};
+
+// Admin notification for student query
+interface AdminStudentQueryNotificationProps {
+  studentName: string;
+  age: string;
+  city: string;
+  locality: string;
+  studentClass: string;
+  subject: string;
+  topic: string;
+  phone: string;
+  email: string;
+  attendingOfflineClasses: string;
+}
+
+export const AdminStudentQueryNotification: React.FC<AdminStudentQueryNotificationProps> = ({
+  studentName,
+  age,
+  city,
+  locality,
+  studentClass,
+  subject,
+  topic,
+  phone,
+  email,
+  attendingOfflineClasses,
+}) => {
+  const subjectLabels: Record<string, string> = {
+    maths: 'Mathematics',
+    english: 'English',
+    hindi: 'Hindi',
+    science: 'Science',
+    other: 'Other',
+  };
+
+  return (
+    <html>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body style={adminStyles.body}>
+        <table style={adminStyles.container} cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={adminStyles.header}>
+              <img
+                src="https://res.cloudinary.com/dsr89dej0/image/upload/v1763573431/Dharika/gallery/lwmwyjpwq7palbz94s2c.png"
+                alt="Dharika Logo"
+                style={adminStyles.logo}
+              />
+              <h1 style={adminStyles.logoText}>DHARIKA</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={adminStyles.content}>
+              <h2 style={adminStyles.heading}>New Student Query Received 📚</h2>
+
+              <p style={adminStyles.text}>
+                A student has submitted a learning query that needs attention.
+              </p>
+
+              <div style={adminStyles.infoBox}>
+                <p style={adminStyles.infoTitle}>Student Details:</p>
+                <table style={adminStyles.infoTable}>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Name:</td>
+                    <td style={adminStyles.infoValue}>{studentName}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Age:</td>
+                    <td style={adminStyles.infoValue}>{age} years</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Class:</td>
+                    <td style={adminStyles.infoValue}>Class {studentClass}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Location:</td>
+                    <td style={adminStyles.infoValue}>{locality}, {city}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Phone:</td>
+                    <td style={adminStyles.infoValue}>
+                      <a href={`tel:${phone}`} style={adminStyles.link}>{phone}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Email:</td>
+                    <td style={adminStyles.infoValue}>
+                      <a href={`mailto:${email}`} style={adminStyles.link}>{email}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Attending Offline:</td>
+                    <td style={adminStyles.infoValue}>{attendingOfflineClasses === 'yes' ? 'Yes' : 'No'}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div style={adminStyles.infoBox}>
+                <p style={adminStyles.infoTitle}>Query Details:</p>
+                <table style={adminStyles.infoTable}>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Subject:</td>
+                    <td style={adminStyles.infoValue}>{subjectLabels[subject] || subject}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Topic:</td>
+                    <td style={adminStyles.infoValue}><strong>{topic}</strong></td>
+                  </tr>
+                </table>
+              </div>
+
+              <p style={adminStyles.text}>
+                <strong>Action Required:</strong> Please assign a volunteer teacher to create a video solution within 12 hours.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={adminStyles.footer}>
+              <p style={adminStyles.footerText}>
+                © {new Date().getFullYear()} Dharika Admin System
+              </p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  );
+};
+
+// Admin notification for food alert
+interface AdminFoodAlertNotificationProps {
+  donorType: string;
+  establishmentName: string;
+  contactPersonName: string;
+  phone: string;
+  address: string;
+  city: string;
+  quantity: string;
+  preparedAt: string;
+  expiryEstimate: string;
+  photoUrl?: string;
+}
+
+export const AdminFoodAlertNotification: React.FC<AdminFoodAlertNotificationProps> = ({
+  donorType,
+  establishmentName,
+  contactPersonName,
+  phone,
+  address,
+  city,
+  quantity,
+  preparedAt,
+  expiryEstimate,
+  photoUrl,
+}) => {
+  const donorTypeLabels: Record<string, string> = {
+    restaurant: 'Restaurant',
+    cafe: 'Café',
+    caterer: 'Caterer',
+    individual: 'Individual',
+  };
+
+  const expiryLabels: Record<string, string> = {
+    '2_hours': '2 hours',
+    '4_hours': '4 hours',
+    '6_hours': '6 hours',
+    '8_hours': '8 hours',
+    'same_day': 'Same day (until night)',
+  };
+
+  return (
+    <html>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body style={adminStyles.body}>
+        <table style={adminStyles.container} cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={adminStyles.header}>
+              <img
+                src="https://res.cloudinary.com/dsr89dej0/image/upload/v1763573431/Dharika/gallery/lwmwyjpwq7palbz94s2c.png"
+                alt="Dharika Logo"
+                style={adminStyles.logo}
+              />
+              <h1 style={adminStyles.logoText}>DHARIKA</h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={adminStyles.content}>
+              <h2 style={adminStyles.heading}>🚨 URGENT: New Food Donation Alert</h2>
+
+              <p style={adminStyles.text}>
+                <strong style={{ color: '#8B0000' }}>Immediate action required!</strong> A food donor has surplus food ready for pickup.
+              </p>
+
+              <div style={adminStyles.infoBox}>
+                <p style={adminStyles.infoTitle}>Donor Information:</p>
+                <table style={adminStyles.infoTable}>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Donor Type:</td>
+                    <td style={adminStyles.infoValue}>{donorTypeLabels[donorType] || donorType}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Establishment:</td>
+                    <td style={adminStyles.infoValue}><strong>{establishmentName}</strong></td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Contact Person:</td>
+                    <td style={adminStyles.infoValue}>{contactPersonName}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Phone:</td>
+                    <td style={adminStyles.infoValue}>
+                      <a href={`tel:${phone}`} style={adminStyles.link}><strong>{phone}</strong></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Address:</td>
+                    <td style={adminStyles.infoValue}>{address}, {city}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div style={adminStyles.infoBox}>
+                <p style={adminStyles.infoTitle}>Food Details:</p>
+                <table style={adminStyles.infoTable}>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Quantity:</td>
+                    <td style={adminStyles.infoValue}><strong>{quantity}</strong></td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Prepared At:</td>
+                    <td style={adminStyles.infoValue}>{preparedAt}</td>
+                  </tr>
+                  <tr>
+                    <td style={adminStyles.infoLabel}>Safe Until:</td>
+                    <td style={adminStyles.infoValue}>
+                      <strong style={{ color: '#8B0000' }}>{expiryLabels[expiryEstimate] || expiryEstimate}</strong>
+                    </td>
+                  </tr>
+                  {photoUrl && (
+                    <tr>
+                      <td style={adminStyles.infoLabel}>Photo:</td>
+                      <td style={adminStyles.infoValue}>
+                        <a href={photoUrl} style={adminStyles.link}>View Food Photo</a>
+                      </td>
+                    </tr>
+                  )}
+                </table>
+              </div>
+
+              <div style={{ ...adminStyles.infoBox, backgroundColor: '#FFE4E1', borderColor: '#8B0000' }}>
+                <p style={{ ...adminStyles.infoTitle, color: '#8B0000' }}>⏰ Action Required:</p>
+                <p style={adminStyles.text}>
+                  1. <strong>Immediately</strong> assign a volunteer for pickup<br />
+                  2. Contact the donor at <a href={`tel:${phone}`} style={adminStyles.link}>{phone}</a><br />
+                  3. Coordinate pickup within the safe consumption window<br />
+                  4. Update the status in the admin dashboard after pickup
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style={adminStyles.footer}>
+              <p style={adminStyles.footerText}>
+                © {new Date().getFullYear()} Dharika Admin System
               </p>
             </td>
           </tr>

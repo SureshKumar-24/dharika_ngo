@@ -42,6 +42,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [showLiabilityNote, setShowLiabilityNote] = useState(false);
+  const [liabilityAccepted, setLiabilityAccepted] = useState(false);
   const [formKey, setFormKey] = useState(0);
 
   const handleChange = (field: keyof FoodAlertFormInput, value: any) => {
@@ -60,12 +61,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
     setErrors({});
     setErrorMessage('');
 
-    // Show liability note first if not already accepted
-    if (!showLiabilityNote) {
-      setShowLiabilityNote(true);
-      return;
-    }
-
+    // Validate form first
     const result = foodAlertFormSchema.safeParse(formData);
 
     if (!result.success) {
@@ -76,8 +72,28 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
       });
       setErrors(fieldErrors);
       setErrorMessage(`Please fix ${Object.keys(fieldErrors).length} error(s) in the form`);
-      scrollToFirstError(fieldErrors);
-      setShowLiabilityNote(false); // Close modal if validation fails
+      
+      // Scroll to the food-alerts section first, then to the error field
+      const section = document.getElementById('food-alerts');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Wait for scroll to complete, then focus on first error field within this section
+        setTimeout(() => {
+          const firstErrorField = Object.keys(fieldErrors)[0];
+          if (firstErrorField) {
+            const element = section.querySelector(`[name="${firstErrorField}"]`);
+            if (element) {
+              (element as HTMLElement).focus();
+            }
+          }
+        }, 500);
+      }
+      return;
+    }
+
+    // Show liability note if not already accepted
+    if (!liabilityAccepted) {
+      setShowLiabilityNote(true);
       return;
     }
 
@@ -144,6 +160,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
         honeypot: '',
       });
       setShowLiabilityNote(false);
+      setLiabilityAccepted(false);
       setFormKey((prev) => prev + 1); // Force re-render of form
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
@@ -153,11 +170,93 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
           ? error.message
           : 'Something went wrong. Please try again.'
       );
+      setShowLiabilityNote(false);
     }
   };
 
-  const handleAcceptLiability = () => {
+  const handleAcceptLiability = async () => {
     setShowLiabilityNote(false);
+    setLiabilityAccepted(true);
+    
+    // Now actually submit the form
+    const result = foodAlertFormSchema.safeParse(formData);
+    if (!result.success) return;
+
+    if (formData.honeypot) {
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setFormData({
+          donorType: '',
+          establishmentName: '',
+          contactPersonName: '',
+          phone: '',
+          address: '',
+          city: '',
+          quantity: '',
+          preparedAt: '',
+          expiryEstimate: '',
+          photoUrl: '',
+          declarationTodayPrepared: false,
+          declarationHygienic: false,
+          declarationSafe: false,
+          honeypot: '',
+        });
+        setLiabilityAccepted(false);
+        setFormKey((prev) => prev + 1);
+      }, 3000);
+      return;
+    }
+
+    setStatus('submitting');
+
+    try {
+      if (onSubmit) {
+        await onSubmit(result.data);
+      } else {
+        const response = await fetch('/api/food-alert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(result.data),
+        });
+
+        if (!response.ok) {
+          const error = await response.json().catch(() => null);
+          throw new Error(error?.error || error?.message || 'Failed to submit food alert');
+        }
+      }
+
+      setStatus('success');
+      setErrors({});
+      setErrorMessage('');
+      setFormData({
+        donorType: '',
+        establishmentName: '',
+        contactPersonName: '',
+        phone: '',
+        address: '',
+        city: '',
+        quantity: '',
+        preparedAt: '',
+        expiryEstimate: '',
+        photoUrl: '',
+        declarationTodayPrepared: false,
+        declarationHygienic: false,
+        declarationSafe: false,
+        honeypot: '',
+      });
+      setLiabilityAccepted(false);
+      setFormKey((prev) => prev + 1);
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.'
+      );
+      setLiabilityAccepted(false);
+    }
   };
 
   return (
@@ -446,16 +545,16 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-maroon rounded-t-xl md:rounded-t-2xl p-5 md:p-6">
+            <div className="bg-gold rounded-t-xl md:rounded-t-2xl p-5 md:p-6">
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-maroon" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg md:text-xl font-bold text-white">
                     Important Responsibility Note
                   </h3>
-                  <p className="text-white/90 text-xs md:text-sm mt-0.5">
+                  <p className="text-white/95 text-xs md:text-sm mt-0.5">
                     Please read carefully before proceeding
                   </p>
                 </div>
@@ -498,7 +597,7 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
               <div className="border-l-4 border-red-500 bg-red-50 rounded-r-lg p-4">
                 <p className="text-xs md:text-sm text-red-900 leading-relaxed">
                   <strong className="flex items-center gap-1.5 mb-1">
-                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
                     Important:
                   </strong>
                   This food will be served to children and families in need. 

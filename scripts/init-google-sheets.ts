@@ -86,12 +86,87 @@ async function initializeGoogleSheets() {
       }
     }
 
+    // Initialize Student Queries sheet
+    console.log('📝 Setting up "Student Queries" sheet...');
+    const studentQueryHeaders = [
+      'Name',
+      'Age',
+      'City',
+      'Locality',
+      'Class',
+      'Subject',
+      'Topic',
+      'Phone',
+      'Email',
+      'Attending Offline Classes',
+      'Timestamp',
+    ];
+
+    try {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: sheetId,
+        range: 'Student Queries!A1:K1',
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [studentQueryHeaders],
+        },
+      });
+      console.log('✅ "Student Queries" sheet initialized with headers\n');
+    } catch (error: any) {
+      if (error.message?.includes('Unable to parse range')) {
+        console.log('⚠️  Sheet "Student Queries" not found. Please create it manually in your spreadsheet.\n');
+      } else {
+        throw error;
+      }
+    }
+
+    // Initialize Food Rescue Alerts sheet
+    console.log('📝 Setting up "Food Rescue Alerts" sheet...');
+    const foodAlertHeaders = [
+      'Donor Type',
+      'Establishment Name',
+      'Contact Person Name',
+      'Phone',
+      'Address',
+      'City',
+      'Quantity',
+      'Prepared At',
+      'Expiry Estimate',
+      'Status',
+      'Photo URL',
+      'Pickup Photo URL',
+      'Delivery Photo URL',
+      'Timestamp',
+    ];
+
+    try {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: sheetId,
+        range: 'Food Rescue Alerts!A1:N1',
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [foodAlertHeaders],
+        },
+      });
+      console.log('✅ "Food Rescue Alerts" sheet initialized with headers\n');
+    } catch (error: any) {
+      if (error.message?.includes('Unable to parse range')) {
+        console.log('⚠️  Sheet "Food Rescue Alerts" not found. Please create it manually in your spreadsheet.\n');
+      } else {
+        throw error;
+      }
+    }
+
     console.log('🎉 Google Sheets initialization complete!');
     console.log('\n📋 Next steps:');
     console.log('1. Make sure you have shared the spreadsheet with:', serviceAccountEmail);
     console.log('2. Give the service account "Editor" permissions');
-    console.log('3. Verify the sheet tabs are named "Volunteer List" and "Suggestions"');
-    console.log('\n✨ Your volunteer form submissions will now sync to Google Sheets!');
+    console.log('3. Verify the sheet tabs are named:');
+    console.log('   - "Volunteer List"');
+    console.log('   - "Suggestions"');
+    console.log('   - "Student Queries"');
+    console.log('   - "Food Rescue Alerts"');
+    console.log('\n✨ All form submissions will now sync to Google Sheets!');
   } catch (error) {
     console.error('❌ Error initializing Google Sheets:', error);
     process.exit(1);

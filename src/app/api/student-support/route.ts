@@ -138,6 +138,35 @@ export async function POST(request: NextRequest) {
       // Do not fail the request if email sending fails
     }
 
+    // 5) Send admin notification email
+    try {
+      const { AdminStudentQueryNotification } = await import('@/lib/email-templates');
+      const adminEmailHtml = await render(
+        React.createElement(AdminStudentQueryNotification, {
+          studentName: data.name,
+          age: data.age || '',
+          city: data.city,
+          locality: data.locality,
+          studentClass: data.studentClass,
+          subject: data.subject,
+          topic: data.topic,
+          phone: data.phone,
+          email: data.email,
+          attendingOfflineClasses: data.attendingOfflineClasses,
+        })
+      );
+
+      await resend.emails.send({
+        from: process.env.EMAIL_FROM || 'Dharika <onboarding@resend.dev>',
+        to: process.env.ADMIN_EMAIL_TO || 'sk20012404@gmail.com',
+        subject: `🎓 New Student Query: ${data.subject} - ${data.name}`,
+        html: adminEmailHtml,
+      });
+    } catch (error) {
+      console.error('❌ Failed to send admin notification email', error);
+      // Do not fail the request if email sending fails
+    }
+
     return NextResponse.json(
       {
         success: true,

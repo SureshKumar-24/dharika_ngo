@@ -166,15 +166,17 @@ export async function appendStudentQueryData(
   data: Omit<StudentQuerySubmission, 'timestamp' | 'source'>
 ): Promise<void> {
   try {
-    const sheetId = process.env.GOOGLE_SHEET_ID_STUDENT_QUERIES;
+    // Use the main sheet ID - all tabs are in the same spreadsheet
+    const sheetId = process.env.GOOGLE_SHEET_ID || '1tz65PQ71Ycvpadixd2EoC1teXD0MTs5SV11Y856wQG4';
 
     if (!sheetId) {
       console.warn(
-        '⚠️  [Google Sheets] GOOGLE_SHEET_ID_STUDENT_QUERIES not configured, skipping sync'
+        '⚠️  [Google Sheets] GOOGLE_SHEET_ID not configured, skipping sync'
       );
       return;
     }
 
+    console.log('📊 [Google Sheets] Appending student query data...');
     const sheets = getGoogleSheetsClient();
 
     const now = new Date();
@@ -189,25 +191,24 @@ export async function appendStudentQueryData(
       timeZone: 'Asia/Kolkata',
     });
 
-    // Match actual sheet structure: Timestamp, Name, Age, City, Subject, Topic, Phone, Email, Attending Offline Classes, Source
-    // Note: Locality and Class are combined into City and Subject for now
-    // If you add separate columns, update this mapping
+    // Reordered: Name, Age, City, Class, Subject, Topic, Phone, Email, Attending Offline Classes, Timestamp
     const row = [
-      timestamp,
       data.name,
       data.age || '',
-      `${data.city}${data.locality ? `, ${data.locality}` : ''}`, // Combine city + locality
-      `${data.studentClass} - ${data.subject}`, // Combine class and subject
+      data.city,
+      data.locality || '',
+      data.studentClass,
+      data.subject,
       data.topic,
       data.phone,
       data.email,
       data.attendingOfflineClasses,
-      'website',
+      timestamp,
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: 'Student Queries!A:J',
+      range: 'Student Queries!A:K',
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {
@@ -228,15 +229,17 @@ export async function appendFoodAlertData(
   data: Omit<FoodAlertSubmission, 'timestamp' | 'source' | 'status'>
 ): Promise<void> {
   try {
-    const sheetId = process.env.GOOGLE_SHEET_ID_FOOD_ALERTS;
+    // Use the main sheet ID - all tabs are in the same spreadsheet
+    const sheetId = process.env.GOOGLE_SHEET_ID || '1tz65PQ71Ycvpadixd2EoC1teXD0MTs5SV11Y856wQG4';
 
     if (!sheetId) {
       console.warn(
-        '⚠️  [Google Sheets] GOOGLE_SHEET_ID_FOOD_ALERTS not configured, skipping sync'
+        '⚠️  [Google Sheets] GOOGLE_SHEET_ID not configured, skipping sync'
       );
       return;
     }
 
+    console.log('📊 [Google Sheets] Appending food alert data...');
     const sheets = getGoogleSheetsClient();
 
     const now = new Date();
@@ -251,8 +254,8 @@ export async function appendFoodAlertData(
       timeZone: 'Asia/Kolkata',
     });
 
+    // Reordered: Donor Type, Establishment, Contact Person, Phone, Address, City, Quantity, Prepared At, Expiry, Status, Photo URLs, Timestamp
     const row = [
-      timestamp,
       data.donorType,
       data.establishmentName,
       data.contactPersonName,
@@ -262,16 +265,16 @@ export async function appendFoodAlertData(
       data.quantity,
       data.preparedAt,
       data.expiryEstimate,
-      data.photoUrl || '',
       'pending',
+      data.photoUrl || '',
       data.pickupPhotoUrl || '',
       data.deliveryPhotoUrl || '',
-      'website',
+      timestamp,
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: 'Food Rescue Alerts!A:O',
+      range: 'Food Rescue Alerts!A:N',
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {

@@ -25,7 +25,39 @@ type Suggestion = {
   created_at: string;
 };
 
-type Tab = 'volunteers' | 'suggestions';
+type StudentQuery = {
+  id: number;
+  name: string;
+  age: string;
+  city: string;
+  locality: string;
+  student_class: string;
+  subject: string;
+  topic: string;
+  phone: string;
+  email: string;
+  attending_offline_classes: string;
+  status: string;
+  created_at: string;
+};
+
+type FoodAlert = {
+  id: number;
+  donor_type: string;
+  establishment_name: string;
+  contact_person_name: string;
+  phone: string;
+  address: string;
+  city: string;
+  quantity: string;
+  prepared_at: string;
+  expiry_estimate: string;
+  photo_url: string | null;
+  status: string;
+  created_at: string;
+};
+
+type Tab = 'volunteers' | 'suggestions' | 'student-queries' | 'food-alerts';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -34,6 +66,8 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('volunteers');
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [studentQueries, setStudentQueries] = useState<StudentQuery[]>([]);
+  const [foodAlerts, setFoodAlerts] = useState<FoodAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,26 +87,78 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const [volunteersRes, suggestionsRes] = await Promise.all([
+      const [volunteersRes, suggestionsRes, studentQueriesRes, foodAlertsRes] = await Promise.all([
         fetch('/api/admin/volunteers'),
         fetch('/api/admin/suggestions'),
+        fetch('/api/admin/student-queries'),
+        fetch('/api/admin/food-alerts'),
       ]);
 
-      if (!volunteersRes.ok || !suggestionsRes.ok) {
+      if (!volunteersRes.ok || !suggestionsRes.ok || !studentQueriesRes.ok || !foodAlertsRes.ok) {
         throw new Error('Failed to fetch data');
       }
 
       const volunteersData = await volunteersRes.json();
       const suggestionsData = await suggestionsRes.json();
+      const studentQueriesData = await studentQueriesRes.json();
+      const foodAlertsData = await foodAlertsRes.json();
 
       setVolunteers(volunteersData.volunteers || []);
       setSuggestions(suggestionsData.suggestions || []);
+      setStudentQueries(studentQueriesData.queries || []);
+      setFoodAlerts(foodAlertsData.alerts || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Update student query status
+  const updateStudentQueryStatus = async (id: number, newStatus: string, videoUrl?: string) => {
+    try {
+      const response = await fetch(`/api/admin/student-queries/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus, videoUrl }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      // Update local state
+      setStudentQueries(prev =>
+        prev.map(q => q.id === id ? { ...q, status: newStatus } : q)
+      );
+    } catch (error) {
+      console.error('Error updating student query status:', error);
+      alert('Failed to update status. Please try again.');
+    }
+  };
+
+  // Update food alert status
+  const updateFoodAlertStatus = async (id: number, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/admin/food-alerts/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      // Update local state
+      setFoodAlerts(prev =>
+        prev.map(a => a.id === id ? { ...a, status: newStatus } : a)
+      );
+    } catch (error) {
+      console.error('Error updating food alert status:', error);
+      alert('Failed to update status. Please try again.');
     }
   };
 
@@ -100,8 +186,37 @@ export default function AdminPage() {
     );
   }, [suggestions, searchQuery]);
 
+  const filteredStudentQueries = useMemo(() => {
+    if (!searchQuery) return studentQueries;
+    const query = searchQuery.toLowerCase();
+    return studentQueries.filter(
+      (q) =>
+        q.name.toLowerCase().includes(query) ||
+        q.email.toLowerCase().includes(query) ||
+        q.phone.includes(query) ||
+        q.city.toLowerCase().includes(query) ||
+        q.topic.toLowerCase().includes(query)
+    );
+  }, [studentQueries, searchQuery]);
+
+  const filteredFoodAlerts = useMemo(() => {
+    if (!searchQuery) return foodAlerts;
+    const query = searchQuery.toLowerCase();
+    return foodAlerts.filter(
+      (a) =>
+        a.establishment_name.toLowerCase().includes(query) ||
+        a.contact_person_name.toLowerCase().includes(query) ||
+        a.phone.includes(query) ||
+        a.city.toLowerCase().includes(query)
+    );
+  }, [foodAlerts, searchQuery]);
+
   // Pagination logic
-  const currentData = activeTab === 'volunteers' ? filteredVolunteers : filteredSuggestions;
+  const currentData =
+    activeTab === 'volunteers' ? filteredVolunteers :
+      activeTab === 'suggestions' ? filteredSuggestions :
+        activeTab === 'student-queries' ? filteredStudentQueries :
+          filteredFoodAlerts;
   const totalPages = Math.ceil(currentData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -161,29 +276,29 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
-        <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="mb-4 sm:mb-6 lg:mb-8 flex flex-col gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-maroon">Admin Dashboard</h1>
-            <p className="mt-2 text-gray-600">Manage volunteers and suggestions</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-maroon">Admin Dashboard</h1>
+            <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Manage volunteers and suggestions</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button
               onClick={handleManageImagesClick}
-              className="px-5 py-2.5 bg-maroon text-white rounded-lg hover:bg-maroon/90 transition-all font-medium shadow-sm hover:shadow-md"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 bg-maroon text-white rounded-lg hover:bg-maroon/90 transition-all font-medium shadow-sm hover:shadow-md text-sm sm:text-base"
             >
               Manage Images
             </button>
             <button
               onClick={() => router.push('/admin/resources')}
-              className="px-5 py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium text-sm sm:text-base"
             >
               Admin Resources
             </button>
             <button
               onClick={handleLogout}
-              className="px-5 py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-maroon border-2 border-maroon rounded-lg hover:bg-maroon hover:text-white transition-all font-medium text-sm sm:text-base"
             >
               Logout
             </button>
@@ -191,42 +306,63 @@ export default function AdminPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow-lg border border-gold/20 mb-6">
-          <div className="border-b border-gray-200">
-            <nav className="flex -mb-px">
+        <div className="bg-white rounded-lg shadow-lg border border-gold/20 mb-4 sm:mb-6">
+          <div className="border-b border-gray-200 overflow-x-auto">
+            <nav className="flex -mb-px min-w-max">
               <button
                 onClick={() => setActiveTab('volunteers')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'volunteers'
-                    ? 'border-gold text-maroon'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
-                }`}
+                className={`px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'volunteers'
+                  ? 'border-gold text-maroon'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
+                  }`}
               >
                 Volunteers ({volunteers.length})
               </button>
               <button
                 onClick={() => setActiveTab('suggestions')}
-                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'suggestions'
-                    ? 'border-gold text-maroon'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
-                }`}
+                className={`px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'suggestions'
+                  ? 'border-gold text-maroon'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
+                  }`}
               >
                 Suggestions ({suggestions.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('student-queries')}
+                className={`px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'student-queries'
+                  ? 'border-gold text-maroon'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
+                  }`}
+              >
+                Student Queries ({studentQueries.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('food-alerts')}
+                className={`px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'food-alerts'
+                  ? 'border-gold text-maroon'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gold/50'
+                  }`}
+              >
+                Food Alerts ({foodAlerts.length})
               </button>
             </nav>
           </div>
 
           {/* Search Bar */}
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-3 sm:p-4 lg:p-6 border-b border-gray-200">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder={`Search ${activeTab}...`}
+                placeholder={
+                  activeTab === 'volunteers' ? 'Search by name, email, phone, or city...' :
+                    activeTab === 'suggestions' ? 'Search by name, email, or message...' :
+                      activeTab === 'student-queries' ? 'Search by name, phone, city, or topic...' :
+                        'Search food alerts...'
+                }
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold outline-none transition-all hover:border-gray-400"
               />
             </div>
             {searchQuery && (
@@ -237,7 +373,7 @@ export default function AdminPage() {
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="p-3 sm:p-4 lg:p-6">
             {loading ? (
               <div className="text-center py-12">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-maroon"></div>
@@ -265,8 +401,20 @@ export default function AdminPage() {
                     formatDate={formatDate}
                     getInterestBadgeColor={getInterestBadgeColor}
                   />
-                ) : (
+                ) : activeTab === 'suggestions' ? (
                   <SuggestionsGrid suggestions={paginatedData as Suggestion[]} formatDate={formatDate} />
+                ) : activeTab === 'student-queries' ? (
+                  <StudentQueriesGrid
+                    queries={paginatedData as StudentQuery[]}
+                    formatDate={formatDate}
+                    onStatusUpdate={updateStudentQueryStatus}
+                  />
+                ) : (
+                  <FoodAlertsGrid
+                    alerts={paginatedData as FoodAlert[]}
+                    formatDate={formatDate}
+                    onStatusUpdate={updateFoodAlertStatus}
+                  />
                 )}
                 <Pagination
                   currentPage={currentPage}
@@ -367,6 +515,35 @@ function VolunteersGrid({
   formatDate: (date: string) => string;
   getInterestBadgeColor: (interest: string) => string;
 }) {
+  const getInterestBadge = (interest: string) => {
+    switch (interest.toLowerCase()) {
+      case 'food':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-pastel-yellow text-maroon">
+            Food
+          </span>
+        );
+      case 'teaching':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-pastel-blue text-maroon">
+            Teaching
+          </span>
+        );
+      case 'both':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gold/20 text-maroon">
+            Both
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+            {interest}
+          </span>
+        );
+    }
+  };
+
   return (
     <>
       {/* Mobile Card View */}
@@ -374,38 +551,43 @@ function VolunteersGrid({
         {volunteers.map((volunteer) => (
           <div
             key={volunteer.id}
-            className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+            className="bg-gradient-to-br from-white to-pastel-blue/20 border-2 border-gold/20 rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:border-gold/40"
           >
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <h3 className="font-semibold text-gray-900 text-base">{volunteer.name}</h3>
-                <span
-                  className={`inline-block px-2.5 py-1 text-xs font-medium rounded-full mt-1 ${getInterestBadgeColor(volunteer.interest)}`}
-                >
-                  {volunteer.interest}
-                </span>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="font-bold text-maroon text-lg mb-2">{volunteer.name}</h3>
+                {getInterestBadge(volunteer.interest)}
               </div>
             </div>
-            
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="text-gray-500 font-medium">Phone:</span>{' '}
-                <span className="text-gray-900">{volunteer.phone}</span>
+
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">📞 Phone</div>
+                  <a href={`tel:${volunteer.phone}`} className="text-sm text-maroon hover:text-maroon/80 font-semibold hover:underline transition-colors">
+                    {volunteer.phone}
+                  </a>
+                </div>
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">📍 City</div>
+                  <div className="text-sm text-gray-900 font-medium">{volunteer.city}</div>
+                </div>
               </div>
-              <div>
-                <span className="text-gray-500 font-medium">Email:</span>{' '}
-                <span className="text-gray-900 break-all">{volunteer.email}</span>
+
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">✉️ Email</div>
+                <a href={`mailto:${volunteer.email}`} className="text-sm text-gray-600 hover:text-maroon transition-colors break-all">
+                  {volunteer.email}
+                </a>
               </div>
-              <div>
-                <span className="text-gray-500 font-medium">City:</span>{' '}
-                <span className="text-gray-900">{volunteer.city}</span>
+
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">🕐 Availability</div>
+                <div className="text-sm text-gray-900 font-medium">{volunteer.availability}</div>
               </div>
-              <div>
-                <span className="text-gray-500 font-medium">Availability:</span>{' '}
-                <span className="text-gray-700">{volunteer.availability}</span>
-              </div>
-              <div className="pt-2 border-t border-gray-100">
-                <span className="text-xs text-gray-500">{formatDate(volunteer.created_at)}</span>
+
+              <div className="pt-3 border-t border-gold/20 flex items-center justify-between">
+                <span className="text-xs text-gray-400">{formatDate(volunteer.created_at)}</span>
               </div>
             </div>
           </div>
@@ -413,57 +595,71 @@ function VolunteersGrid({
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block overflow-x-auto">
+      <div className="hidden md:block overflow-x-auto rounded-lg border border-gold/20">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Contact
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                City
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Interest
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Availability
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
+          <thead className="bg-gradient-to-r from-maroon to-maroon/90">
+            <tr>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Volunteer</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Contact</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">City</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Interest</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Availability</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Date</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
-            {volunteers.map((volunteer) => (
-              <tr key={volunteer.id} className="hover:bg-gray-50 transition-colors">
+          <tbody className="bg-white divide-y divide-gold/10">
+            {volunteers.map((volunteer, index) => (
+              <tr
+                key={volunteer.id}
+                className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-pastel-blue/30 hover:to-cream/50 hover:shadow-md ${index % 2 === 0 ? 'bg-white' : 'bg-cream/20'
+                  }`}
+              >
                 <td className="py-4 px-4">
-                  <div className="font-medium text-gray-900">{volunteer.name}</div>
-                </td>
-                <td className="py-4 px-4">
-                  <div className="text-sm text-gray-900">{volunteer.phone}</div>
-                  <div className="text-sm text-gray-500">{volunteer.email}</div>
-                </td>
-                <td className="py-4 px-4">
-                  <div className="text-sm text-gray-900">{volunteer.city}</div>
-                </td>
-                <td className="py-4 px-4">
-                  <span
-                    className={`inline-block px-2.5 py-1 text-xs font-medium rounded-full ${getInterestBadgeColor(volunteer.interest)}`}
-                  >
-                    {volunteer.interest}
-                  </span>
-                </td>
-                <td className="py-4 px-4">
-                  <div className="text-sm text-gray-700 max-w-xs">{volunteer.availability}</div>
-                </td>
-                <td className="py-4 px-4">
-                  <div className="text-sm text-gray-500 whitespace-nowrap">
-                    {formatDate(volunteer.created_at)}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pastel-blue to-maroon/70 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                      {volunteer.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">{volunteer.name}</div>
+                      <div className="text-xs text-gray-500 font-medium">Volunteer</div>
+                    </div>
                   </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <a
+                      href={`tel:${volunteer.phone}`}
+                      className="flex items-center gap-1.5 text-sm text-maroon hover:text-maroon/80 font-bold hover:underline transition-colors group"
+                    >
+                      <span className="text-lg group-hover:scale-110 transition-transform">📞</span>
+                      {volunteer.phone}
+                    </a>
+                    <a
+                      href={`mailto:${volunteer.email}`}
+                      className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-maroon transition-colors group"
+                    >
+                      <span className="group-hover:scale-110 transition-transform">✉️</span>
+                      <span className="truncate max-w-[180px]">{volunteer.email}</span>
+                    </a>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-1.5">
+                    <span>📍</span>
+                    <span className="text-sm text-gray-900 font-semibold">{volunteer.city}</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  {getInterestBadge(volunteer.interest)}
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-700 font-medium max-w-xs flex items-start gap-1.5">
+                    <span className="text-base">🕐</span>
+                    <span>{volunteer.availability}</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-500 whitespace-nowrap font-medium">{formatDate(volunteer.created_at)}</div>
                 </td>
               </tr>
             ))}
@@ -488,24 +684,32 @@ function SuggestionsGrid({
         {suggestions.map((suggestion) => (
           <div
             key={suggestion.id}
-            className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+            className="bg-gradient-to-br from-white to-cream/30 border-2 border-gold/20 rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:border-gold/40"
           >
-            <div className="mb-3">
-              <h3 className="font-semibold text-gray-900 text-base">
-                {suggestion.name || 'Anonymous'}
-              </h3>
-              {suggestion.email && (
-                <p className="text-sm text-gray-500 mt-1">{suggestion.email}</p>
-              )}
-            </div>
-            
-            <div className="space-y-2 text-sm">
-              <div>
-                <span className="text-gray-500 font-medium">Message:</span>
-                <p className="text-gray-700 mt-1">{suggestion.message}</p>
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-pastel-yellow flex items-center justify-center text-2xl shadow-md flex-shrink-0">
+                {suggestion.name ? suggestion.name.charAt(0).toUpperCase() : '💡'}
               </div>
-              <div className="pt-2 border-t border-gray-100">
-                <span className="text-xs text-gray-500">{formatDate(suggestion.created_at)}</span>
+              <div className="flex-1">
+                <h3 className="font-bold text-maroon text-lg mb-1">
+                  {suggestion.name || 'Anonymous User'}
+                </h3>
+                {suggestion.email && (
+                  <a href={`mailto:${suggestion.email}`} className="text-sm text-gray-600 hover:text-maroon transition-colors break-all">
+                    ✉️ {suggestion.email}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-white/60 rounded-lg p-4 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">💬 Suggestion</div>
+                <p className="text-sm text-gray-900 leading-relaxed">{suggestion.message}</p>
+              </div>
+
+              <div className="pt-3 border-t border-gold/20 flex items-center justify-between">
+                <span className="text-xs text-gray-400">{formatDate(suggestion.created_at)}</span>
               </div>
             </div>
           </div>
@@ -513,42 +717,492 @@ function SuggestionsGrid({
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block overflow-x-auto">
+      <div className="hidden md:block overflow-x-auto rounded-lg border border-gold/20">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Message
-              </th>
-              <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
+          <thead className="bg-gradient-to-r from-maroon to-maroon/90">
+            <tr>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">User</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Email</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Suggestion</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Date</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
-            {suggestions.map((suggestion) => (
-              <tr key={suggestion.id} className="hover:bg-gray-50 transition-colors">
+          <tbody className="bg-white divide-y divide-gold/10">
+            {suggestions.map((suggestion, index) => (
+              <tr
+                key={suggestion.id}
+                className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-cream/50 hover:to-pastel-yellow/20 hover:shadow-md ${index % 2 === 0 ? 'bg-white' : 'bg-cream/20'
+                  }`}
+              >
                 <td className="py-4 px-4">
-                  <div className="font-medium text-gray-900">
-                    {suggestion.name || 'Anonymous'}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-pastel-yellow flex items-center justify-center text-white font-bold text-sm shadow-md">
+                      {suggestion.name ? suggestion.name.charAt(0).toUpperCase() : '💡'}
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">
+                        {suggestion.name || 'Anonymous'}
+                      </div>
+                      <div className="text-xs text-gray-500 font-medium">Feedback</div>
+                    </div>
                   </div>
                 </td>
                 <td className="py-4 px-4">
-                  <div className="text-sm text-gray-500">{suggestion.email || '-'}</div>
+                  {suggestion.email ? (
+                    <a
+                      href={`mailto:${suggestion.email}`}
+                      className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-maroon transition-colors group"
+                    >
+                      <span className="group-hover:scale-110 transition-transform">✉️</span>
+                      <span className="truncate max-w-[200px]">{suggestion.email}</span>
+                    </a>
+                  ) : (
+                    <span className="text-sm text-gray-400 italic">No email provided</span>
+                  )}
                 </td>
                 <td className="py-4 px-4">
-                  <div className="text-sm text-gray-700 max-w-md">{suggestion.message}</div>
-                </td>
-                <td className="py-4 px-4">
-                  <div className="text-sm text-gray-500 whitespace-nowrap">
-                    {formatDate(suggestion.created_at)}
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg mt-0.5">💬</span>
+                    <p className="text-sm text-gray-700 font-medium max-w-md leading-relaxed">{suggestion.message}</p>
                   </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-500 whitespace-nowrap font-medium">{formatDate(suggestion.created_at)}</div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function StudentQueriesGrid({
+  queries,
+  formatDate,
+  onStatusUpdate,
+}: {
+  queries: StudentQuery[];
+  formatDate: (date: string) => string;
+  onStatusUpdate: (id: number, status: string) => void;
+}) {
+  const getStatusBadge = (status: string, queryId: number) => {
+    return (
+      <select
+        value={status}
+        onChange={(e) => onStatusUpdate(queryId, e.target.value)}
+        className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border-2 cursor-pointer transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gold"
+        style={{
+          backgroundColor: status === 'pending' ? '#fef3c7' : status === 'in_progress' ? '#dbeafe' : '#d1fae5',
+          borderColor: status === 'pending' ? '#f59e0b' : status === 'in_progress' ? '#3b82f6' : '#10b981',
+          color: status === 'pending' ? '#92400e' : status === 'in_progress' ? '#1e40af' : '#065f46',
+        }}
+      >
+        <option value="pending">Pending</option>
+        <option value="in_progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    );
+  };
+
+  const getStatusBadgeOld = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 shadow-sm">
+            <span className="w-1.5 h-1.5 bg-yellow-900 rounded-full mr-2 animate-pulse"></span>
+            Pending
+          </span>
+        );
+      case 'resolved':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-green-400 to-green-500 text-green-900 shadow-sm">
+            <span className="w-1.5 h-1.5 bg-green-900 rounded-full mr-2"></span>
+            Resolved
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 shadow-sm">
+            <span className="w-1.5 h-1.5 bg-gray-800 rounded-full mr-2"></span>
+            {status}
+          </span>
+        );
+    }
+  };
+
+  return (
+    <>
+      {/* Mobile Card View */}
+      <div className="block lg:hidden space-y-4">
+        {queries.map((query) => (
+          <div
+            key={query.id}
+            className="bg-gradient-to-br from-white to-cream/30 border-2 border-gold/20 rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:border-gold/40"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="font-bold text-maroon text-lg mb-1">{query.name}</h3>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="px-2.5 py-1 bg-maroon/10 text-maroon rounded-md font-medium">
+                    Class {query.student_class}
+                  </span>
+                  <span className="text-gray-400">•</span>
+                  <span className="text-gray-600 font-medium">{query.subject}</span>
+                </div>
+              </div>
+              <div className="ml-3">
+                {getStatusBadge(query.status, query.id)}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Topic</div>
+                <div className="text-sm text-gray-900 font-medium">{query.topic}</div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Phone</div>
+                  <a href={`tel:${query.phone}`} className="text-sm text-maroon hover:text-maroon/80 font-semibold hover:underline transition-colors">
+                    {query.phone}
+                  </a>
+                </div>
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Age</div>
+                  <div className="text-sm text-gray-900 font-medium">{query.age ? `${query.age} years` : 'Not specified'}</div>
+                </div>
+              </div>
+
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Location</div>
+                <div className="text-sm text-gray-900 font-medium">{query.locality}, {query.city}</div>
+              </div>
+
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Email</div>
+                <div className="text-sm text-gray-600 break-all">{query.email}</div>
+              </div>
+
+              <div className="pt-3 border-t border-gold/20 flex items-center justify-between">
+                <span className="text-xs text-gray-500 font-medium">
+                  {query.attending_offline_classes === 'yes' ? '📚 Attending offline classes' : '💻 Not attending offline'}
+                </span>
+                <span className="text-xs text-gray-400">{formatDate(query.created_at)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto rounded-lg border border-gold/20">
+        <table className="w-full">
+          <thead className="bg-gradient-to-r from-maroon to-maroon/90">
+            <tr>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Student</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Class/Subject</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Topic</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Contact</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Location</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Status</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Date</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gold/10">
+            {queries.map((query, index) => (
+              <tr
+                key={query.id}
+                className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-cream/50 hover:to-pastel-yellow/20 hover:shadow-md ${index % 2 === 0 ? 'bg-white' : 'bg-cream/20'
+                  }`}
+              >
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-maroon to-maroon/80 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                      {query.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">{query.name}</div>
+                      {query.age && <div className="text-xs text-gray-500 font-medium">{query.age} years old</div>}
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center px-2.5 py-1 bg-maroon/10 text-maroon rounded-md text-sm font-bold">
+                      Class {query.student_class}
+                    </div>
+                    <div className="text-sm text-gray-600 font-medium">{query.subject}</div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-900 font-medium max-w-xs line-clamp-2">{query.topic}</div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <a
+                      href={`tel:${query.phone}`}
+                      className="flex items-center gap-1.5 text-sm text-maroon hover:text-maroon/80 font-bold hover:underline transition-colors group"
+                    >
+                      <span className="text-lg group-hover:scale-110 transition-transform">📞</span>
+                      {query.phone}
+                    </a>
+                    <a
+                      href={`mailto:${query.email}`}
+                      className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-maroon transition-colors group"
+                    >
+                      <span className="group-hover:scale-110 transition-transform">✉️</span>
+                      <span className="truncate max-w-[150px]">{query.email}</span>
+                    </a>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-gray-900 font-semibold">{query.locality}</div>
+                    <div className="text-xs text-gray-500 font-medium">{query.city}</div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  {getStatusBadge(query.status, query.id)}
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-500 whitespace-nowrap font-medium">{formatDate(query.created_at)}</div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function FoodAlertsGrid({
+  alerts,
+  formatDate,
+  onStatusUpdate,
+}: {
+  alerts: FoodAlert[];
+  formatDate: (date: string) => string;
+  onStatusUpdate: (id: number, status: string) => void;
+}) {
+  const getStatusBadge = (status: string, alertId: number) => {
+    const getStatusColor = () => {
+      switch (status) {
+        case 'pending': return { bg: '#fee2e2', border: '#dc2626', text: '#991b1b' };
+        case 'assigned': return { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' };
+        case 'picked_up': return { bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' };
+        case 'delivered': return { bg: '#d1fae5', border: '#10b981', text: '#065f46' };
+        default: return { bg: '#f3f4f6', border: '#6b7280', text: '#374151' };
+      }
+    };
+
+    const colors = getStatusColor();
+
+    return (
+      <select
+        value={status}
+        onChange={(e) => onStatusUpdate(alertId, e.target.value)}
+        className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border-2 cursor-pointer transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gold"
+        style={{
+          backgroundColor: colors.bg,
+          borderColor: colors.border,
+          color: colors.text,
+        }}
+      >
+        <option value="pending">Pending</option>
+        <option value="assigned">Assigned</option>
+        <option value="picked_up">Picked Up</option>
+        <option value="delivered">Delivered</option>
+      </select>
+    );
+  };
+
+  const getStatusBadgeOld = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+            <span className="w-1.5 h-1.5 bg-red-600 rounded-full mr-2 animate-pulse"></span>
+            Pending
+          </span>
+        );
+      case 'assigned':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-pastel-yellow text-maroon">
+            <span className="w-1.5 h-1.5 bg-maroon rounded-full mr-2"></span>
+            Assigned
+          </span>
+        );
+      case 'picked_up':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-pastel-blue text-maroon">
+            <span className="w-1.5 h-1.5 bg-maroon rounded-full mr-2"></span>
+            Picked Up
+          </span>
+        );
+      case 'delivered':
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+            <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-2"></span>
+            Delivered
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+            <span className="w-1.5 h-1.5 bg-gray-600 rounded-full mr-2"></span>
+            {status}
+          </span>
+        );
+    }
+  };
+
+  return (
+    <>
+      {/* Mobile Card View */}
+      <div className="block lg:hidden space-y-4">
+        {alerts.map((alert) => (
+          <div
+            key={alert.id}
+            className="bg-gradient-to-br from-white to-pastel-yellow/20 border-2 border-gold/20 rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:border-gold/40"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="font-bold text-maroon text-lg mb-1">{alert.establishment_name}</h3>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="px-2.5 py-1 bg-pastel-yellow text-maroon rounded-md font-medium">
+                    {alert.donor_type}
+                  </span>
+                </div>
+              </div>
+              <div className="ml-3">
+                {getStatusBadge(alert.status, alert.id)}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Contact</div>
+                  <div className="text-sm text-gray-900 font-medium">{alert.contact_person_name}</div>
+                </div>
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Phone</div>
+                  <a href={`tel:${alert.phone}`} className="text-sm text-maroon hover:text-maroon/80 font-semibold hover:underline transition-colors">
+                    {alert.phone}
+                  </a>
+                </div>
+              </div>
+
+              <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">📍 Location</div>
+                <div className="text-sm text-gray-900 font-medium">{alert.address}</div>
+                <div className="text-xs text-gray-600 mt-1">{alert.city}</div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">🍽️ Quantity</div>
+                  <div className="text-sm text-gray-900 font-bold">{alert.quantity}</div>
+                </div>
+                <div className="bg-white/60 rounded-lg p-3 border border-gold/10">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">⏰ Prepared</div>
+                  <div className="text-sm text-gray-900 font-medium">{alert.prepared_at}</div>
+                </div>
+              </div>
+
+              <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                <div className="text-xs font-semibold text-red-600 uppercase tracking-wide mb-1">⚠️ Expiry</div>
+                <div className="text-sm text-red-700 font-bold">{alert.expiry_estimate}</div>
+              </div>
+
+              <div className="pt-3 border-t border-gold/20 flex items-center justify-between">
+                <span className="text-xs text-gray-400">{formatDate(alert.created_at)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto rounded-lg border border-gold/20">
+        <table className="w-full">
+          <thead className="bg-gradient-to-r from-maroon to-maroon/90">
+            <tr>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Establishment</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Contact</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Location</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Quantity</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Prepared/Expiry</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Status</th>
+              <th className="text-left py-4 px-4 text-xs font-bold text-white uppercase tracking-wider">Date</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gold/10">
+            {alerts.map((alert, index) => (
+              <tr
+                key={alert.id}
+                className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-pastel-yellow/30 hover:to-cream/50 hover:shadow-md ${index % 2 === 0 ? 'bg-white' : 'bg-cream/20'
+                  }`}
+              >
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pastel-yellow to-gold flex items-center justify-center text-maroon font-bold text-sm shadow-md">
+                      {alert.establishment_name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">{alert.establishment_name}</div>
+                      <div className="text-xs text-gray-500 font-medium">{alert.donor_type}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-gray-900 font-semibold">{alert.contact_person_name}</div>
+                    <a
+                      href={`tel:${alert.phone}`}
+                      className="flex items-center gap-1.5 text-sm text-maroon hover:text-maroon/80 font-bold hover:underline transition-colors group"
+                    >
+                      <span className="text-lg group-hover:scale-110 transition-transform">📞</span>
+                      {alert.phone}
+                    </a>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-gray-900 font-medium flex items-center gap-1">
+                      <span>📍</span>
+                      <span className="max-w-[200px] truncate">{alert.address}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 font-medium">{alert.city}</div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-pastel-yellow/30 text-maroon rounded-md">
+                    <span className="text-base">🍽️</span>
+                    <span className="text-sm font-bold">{alert.quantity}</span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-gray-700 font-medium flex items-center gap-1">
+                      <span>⏰</span>
+                      {alert.prepared_at}
+                    </div>
+                    <div className="inline-flex items-center gap-1 text-xs text-red-700 font-bold bg-red-50 px-2 py-1 rounded">
+                      <span>⚠️</span>
+                      {alert.expiry_estimate}
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  {getStatusBadge(alert.status, alert.id)}
+                </td>
+                <td className="py-4 px-4">
+                  <div className="text-sm text-gray-500 whitespace-nowrap font-medium">{formatDate(alert.created_at)}</div>
                 </td>
               </tr>
             ))}
@@ -578,19 +1232,19 @@ function Pagination({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-gray-200">
-      <div className="text-sm text-gray-600">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+      <div className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
         Showing {startItem} to {endItem} of {totalItems} results
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 order-1 sm:order-2">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Previous page"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         <div className="flex items-center gap-1">
@@ -605,18 +1259,17 @@ function Pagination({
                 <button
                   key={page}
                   onClick={() => onPageChange(page)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    currentPage === page
-                      ? 'bg-maroon text-white'
-                      : 'border border-gray-300 hover:bg-gray-50'
-                  }`}
+                  className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${currentPage === page
+                    ? 'bg-maroon text-white'
+                    : 'border border-gray-300 hover:bg-gray-50'
+                    }`}
                 >
                   {page}
                 </button>
               );
             } else if (page === currentPage - 2 || page === currentPage + 2) {
               return (
-                <span key={page} className="px-2 text-gray-400 hidden sm:inline">
+                <span key={page} className="px-1 sm:px-2 text-gray-400 text-xs sm:text-sm hidden sm:inline">
                   ...
                 </span>
               );
@@ -628,10 +1281,10 @@ function Pagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1.5 sm:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Next page"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
     </div>

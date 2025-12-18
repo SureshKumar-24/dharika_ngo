@@ -102,14 +102,14 @@ export const Navigation: React.FC<NavigationProps> = ({
             </button>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-1">
               {sections.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
                   onKeyDown={(e) => handleKeyDown(e, section.id)}
                   className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-colors',
+                    'px-3 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
                     'focus:outline-none focus:ring-2 focus:ring-gold',
                     activeSection === section.id
                       ? 'bg-gold text-white'
@@ -125,7 +125,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-foreground hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold"
+              className="lg:hidden p-2 rounded-lg text-foreground hover:bg-gold/10 focus:outline-none focus:ring-2 focus:ring-gold"
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
@@ -150,7 +150,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 z-40 md:hidden"
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
               onClick={() => setMobileMenuOpen(false)}
               aria-hidden="true"
             />
@@ -162,7 +162,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden"
+              className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 lg:hidden"
               role="dialog"
               aria-label="Mobile navigation menu"
             >

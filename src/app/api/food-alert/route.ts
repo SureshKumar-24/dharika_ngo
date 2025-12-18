@@ -107,6 +107,39 @@ export async function POST(request: NextRequest) {
       sheetLink: process.env.FOOD_ALERTS_SHEET_URL,
     });
 
+    // 4) Send admin notification email
+    try {
+      const { AdminFoodAlertNotification } = await import('@/lib/email-templates');
+      const { resend } = await import('@/lib/resend');
+      const { render } = await import('@react-email/render');
+      const React = await import('react');
+
+      const adminEmailHtml = await render(
+        React.createElement(AdminFoodAlertNotification, {
+          donorType: data.donorType,
+          establishmentName: data.establishmentName,
+          contactPersonName: data.contactPersonName,
+          phone: data.phone,
+          address: data.address,
+          city: data.city,
+          quantity: data.quantity,
+          preparedAt: data.preparedAt,
+          expiryEstimate: data.expiryEstimate,
+          photoUrl: data.photoUrl,
+        })
+      );
+
+      await resend.emails.send({
+        from: process.env.EMAIL_FROM || 'Dharika <onboarding@resend.dev>',
+        to: process.env.ADMIN_EMAIL_TO || 'sk20012404@gmail.com',
+        subject: `🚨 URGENT: Food Donation - ${data.establishmentName}, ${data.city}`,
+        html: adminEmailHtml,
+      });
+    } catch (error) {
+      console.error('❌ Failed to send admin notification email', error);
+      // Do not fail the request if email sending fails
+    }
+
     return NextResponse.json(
       {
         success: true,
