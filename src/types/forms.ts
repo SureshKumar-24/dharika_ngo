@@ -45,7 +45,7 @@ export interface StudentQueryFormData {
   city: string;
   locality: string;
   studentClass: string;
-  subject: 'maths' | 'english' | 'hindi' | 'science' | 'other';
+  subject: string;
   topic: string;
   phone: string;
   email: string;
@@ -60,7 +60,7 @@ export interface StudentQuerySubmission {
   city: string;
   locality: string;
   studentClass: string;
-  subject: 'maths' | 'english' | 'hindi' | 'science' | 'other';
+  subject: string;
   topic: string;
   phone: string;
   email: string;
@@ -70,7 +70,7 @@ export interface StudentQuerySubmission {
 
 // Food Rescue – surplus food alerts
 export interface FoodAlertFormData {
-  donorType: 'restaurant' | 'cafe' | 'caterer' | 'individual';
+  donorType: string;
   establishmentName: string;
   contactPersonName: string;
   phone: string;
@@ -78,7 +78,7 @@ export interface FoodAlertFormData {
   city: string;
   quantity: string;
   preparedAt: string;
-  expiryEstimate: '2_hours' | '4_hours' | '6_hours' | '8_hours' | 'same_day';
+  expiryEstimate: string;
   photoUrl?: string;
   declarationTodayPrepared: boolean;
   declarationHygienic: boolean;
@@ -88,7 +88,7 @@ export interface FoodAlertFormData {
 
 export interface FoodAlertSubmission {
   timestamp: string;
-  donorType: 'restaurant' | 'cafe' | 'caterer' | 'individual';
+  donorType: string;
   establishmentName: string;
   contactPersonName: string;
   phone: string;
@@ -96,7 +96,7 @@ export interface FoodAlertSubmission {
   city: string;
   quantity: string;
   preparedAt: string;
-  expiryEstimate: '2_hours' | '4_hours' | '6_hours' | '8_hours' | 'same_day';
+  expiryEstimate: string;
   photoUrl?: string;
   status: 'pending' | 'assigned' | 'completed';
   pickupPhotoUrl?: string;

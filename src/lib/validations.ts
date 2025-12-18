@@ -84,26 +84,18 @@ export const studentQueryFormSchema = z.object({
     .min(2, 'Locality is required')
     .max(100, 'Locality must not exceed 100 characters')
     .trim(),
-  studentClass: z.enum(
-    [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-    ],
-    { message: 'Please select a class between 1 and 12' }
-  ),
-  subject: z.enum(['maths', 'english', 'hindi', 'science', 'other'], {
-    message: 'Please select a subject',
-  }),
+  studentClass: z
+    .string()
+    .refine(
+      (val) => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].includes(val),
+      { message: 'Please select a class between 1 and 12' }
+    ),
+  subject: z
+    .string()
+    .refine(
+      (val) => ['maths', 'english', 'hindi', 'science', 'other'].includes(val),
+      { message: 'Please select a subject' }
+    ),
   topic: z
     .string()
     .min(5, 'Please describe your topic or question (at least 5 characters)')
@@ -125,9 +117,12 @@ export type StudentQueryFormInput = z.infer<typeof studentQueryFormSchema>;
 
 // Food Rescue – Surplus food alert form
 export const foodAlertFormSchema = z.object({
-  donorType: z.enum(['restaurant', 'cafe', 'caterer', 'individual'], {
-    message: 'Please select a donor type',
-  }),
+  donorType: z
+    .string()
+    .refine(
+      (val) => ['restaurant', 'cafe', 'caterer', 'individual'].includes(val),
+      { message: 'Please select a donor type' }
+    ),
   establishmentName: z
     .string()
     .min(2, 'Establishment name is required')
@@ -160,12 +155,12 @@ export const foodAlertFormSchema = z.object({
     .string()
     .min(1, 'Please specify time of preparation')
     .trim(),
-  expiryEstimate: z.enum(
-    ['2_hours', '4_hours', '6_hours', '8_hours', 'same_day'],
-    {
-      message: 'Please select an expiry estimate',
-    }
-  ),
+  expiryEstimate: z
+    .string()
+    .refine(
+      (val) => ['2_hours', '4_hours', '6_hours', '8_hours', 'same_day'].includes(val),
+      { message: 'Please select an expiry estimate' }
+    ),
   photoUrl: z
     .string()
     .url('Please enter a valid URL for the photo')
