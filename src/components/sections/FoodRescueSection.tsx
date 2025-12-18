@@ -438,24 +438,24 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
 
       {showLiabilityNote && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in-0 duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in-0 duration-200 overflow-y-auto"
           onClick={() => setShowLiabilityNote(false)}
         >
           <div 
-            className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200"
+            className="max-w-2xl w-full bg-white rounded-xl md:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200 my-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header with gradient background */}
-            <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-t-2xl p-6 md:p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                  <AlertTriangle className="w-6 h-6 text-amber-600" />
+            <div className="bg-gradient-to-br from-maroon via-maroon to-gold rounded-t-xl md:rounded-t-2xl p-4 md:p-6">
+              <div className="flex items-start gap-3 md:gap-4">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-maroon" />
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 md:mb-2">
                     Important Responsibility Note
                   </h3>
-                  <p className="text-amber-50 text-sm">
+                  <p className="text-white/90 text-xs md:text-sm">
                     Please read carefully before proceeding
                   </p>
                 </div>
@@ -463,71 +463,75 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
             </div>
 
             {/* Content */}
-            <div className="p-6 md:p-8 space-y-6">
+            <div className="p-4 md:p-6 lg:p-8 space-y-4 md:space-y-5 max-h-[60vh] md:max-h-none overflow-y-auto">
               {/* English Section */}
-              <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4">
-                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
-                  Declaration of Truthfulness
+              <div className="bg-gold/10 border-l-4 border-gold rounded-r-lg p-3 md:p-4">
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2 text-sm md:text-base">
+                  <span className="w-2 h-2 bg-gold rounded-full flex-shrink-0"></span>
+                  <span>Declaration of Truthfulness</span>
                 </h4>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
                   By submitting this form, you confirm that all details shared are <strong>true to the best
                   of your knowledge</strong>. Providing false information may lead to:
                 </p>
-                <ul className="mt-2 ml-4 space-y-1 text-sm text-gray-700">
+                <ul className="mt-2 ml-2 md:ml-4 space-y-1 text-xs md:text-sm text-gray-700">
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-600 mt-1">•</span>
+                    <span className="text-gold mt-0.5 flex-shrink-0">•</span>
                     <span>Blacklisting from the food donation program</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-600 mt-1">•</span>
+                    <span className="text-gold mt-0.5 flex-shrink-0">•</span>
                     <span>Reporting to relevant authorities in serious cases</span>
                   </li>
                 </ul>
               </div>
 
               {/* Hindi Section */}
-              <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-4">
-                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  सत्यता की घोषणा
+              <div className="bg-maroon/10 border-l-4 border-maroon rounded-r-lg p-3 md:p-4">
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2 text-sm md:text-base">
+                  <span className="w-2 h-2 bg-maroon rounded-full flex-shrink-0"></span>
+                  <span>सत्यता की घोषणा</span>
                 </h4>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
                   कृपया केवल वही भोजन दान करें जो:
                 </p>
-                <ul className="mt-2 ml-4 space-y-1 text-sm text-gray-700">
+                <ul className="mt-2 ml-2 md:ml-4 space-y-1 text-xs md:text-sm text-gray-700">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-maroon mt-0.5 flex-shrink-0">•</span>
                     <span><strong>आज तैयार हुआ हो</strong> (पुराना नहीं)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-maroon mt-0.5 flex-shrink-0">•</span>
                     <span><strong>साफ-सुथरा रखा गया हो</strong> (स्वच्छ कंटेनर में)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-maroon mt-0.5 flex-shrink-0">•</span>
                     <span><strong>खाने के लिए सुरक्षित हो</strong> (ताज़ा और स्वस्थ)</span>
                   </li>
                 </ul>
               </div>
 
               {/* Important Note */}
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-xs text-red-800 leading-relaxed">
-                  <strong>⚠️ Note:</strong> This food will be served to children and families in need. 
+              <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-3 md:p-4">
+                <p className="text-xs md:text-sm text-red-800 leading-relaxed">
+                  <strong className="flex items-center gap-1 mb-1">
+                    <AlertTriangle className="w-3 h-3 md:w-4 md:h-4 inline flex-shrink-0" />
+                    Important:
+                  </strong>
+                  This food will be served to children and families in need. 
                   Your honesty ensures their safety and health. Thank you for your responsibility.
                 </p>
               </div>
             </div>
 
             {/* Footer with buttons */}
-            <div className="bg-gray-50 rounded-b-2xl p-6 md:p-8 border-t border-gray-200">
-              <div className="flex flex-col sm:flex-row gap-3">
+            <div className="bg-cream rounded-b-xl md:rounded-b-2xl p-4 md:p-6 border-t border-gray-200">
+              <div className="flex flex-col-reverse sm:flex-row gap-2 md:gap-3">
                 <Button
                   type="button"
                   variant="secondary"
-                  size="lg"
-                  className="w-full sm:w-1/2 border-2"
+                  size="md"
+                  className="w-full sm:w-1/2 border-2 text-sm md:text-base"
                   onClick={() => setShowLiabilityNote(false)}
                 >
                   Go Back
@@ -535,14 +539,14 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                 <Button
                   type="button"
                   variant="primary"
-                  size="lg"
-                  className="w-full sm:w-1/2 shadow-lg hover:shadow-xl"
+                  size="md"
+                  className="w-full sm:w-1/2 shadow-lg hover:shadow-xl text-sm md:text-base"
                   onClick={handleAcceptLiability}
                 >
                   I Understand & Confirm
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 text-center mt-4">
+              <p className="text-[10px] md:text-xs text-gray-500 text-center mt-3 md:mt-4">
                 By clicking confirm, you agree to the terms stated above
               </p>
             </div>
