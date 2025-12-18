@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000,
     // Disable image optimization for faster builds (Cloudinary handles it)
     unoptimized: false,
+    // Configure quality levels used in the app
+    qualities: [70, 75, 90],
     // Reduce quality for mobile to improve load times
     dangerouslyAllowSVG: true,
   },
