@@ -12,7 +12,8 @@ import {
   type StudentQueryFormInput,
 } from '@/lib/validations';
 import type { StudentQueryFormData } from '@/types/forms';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { scrollToFirstError } from '@/lib/form-utils';
+import { CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
 export interface StudentSupportSectionProps {
   onSubmit?: (data: StudentQueryFormData) => Promise<void>;
@@ -67,6 +68,8 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
         fieldErrors[path] = issue.message;
       });
       setErrors(fieldErrors);
+      setErrorMessage(`Please fix ${Object.keys(fieldErrors).length} error(s) in the form`);
+      scrollToFirstError(fieldErrors);
       return;
     }
 
@@ -352,6 +355,15 @@ export const StudentSupportSection: React.FC<StudentSupportSectionProps> = ({
                   <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
                     <XCircle className="w-5 h-5 text-red-600 shrink-0" />
                     <p className="text-red-800">{errorMessage}</p>
+                  </div>
+                )}
+
+                {Object.keys(errors).length > 0 && status !== 'error' && (
+                  <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                    <p className="text-amber-800">
+                      Please fix {Object.keys(errors).length} error(s) in the form above
+                    </p>
                   </div>
                 )}
 

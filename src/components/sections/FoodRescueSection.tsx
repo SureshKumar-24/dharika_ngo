@@ -9,7 +9,8 @@ import { CustomSelect } from '@/components/ui/CustomSelect';
 import { Button } from '@/components/ui/Button';
 import { foodAlertFormSchema, type FoodAlertFormInput } from '@/lib/validations';
 import type { FoodAlertFormData } from '@/types/forms';
-import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { scrollToFirstError } from '@/lib/form-utils';
+import { CheckCircle, XCircle, AlertTriangle, AlertCircle } from 'lucide-react';
 
 export interface FoodRescueSectionProps {
   onSubmit?: (data: FoodAlertFormData) => Promise<void>;
@@ -74,6 +75,9 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
         fieldErrors[path] = issue.message;
       });
       setErrors(fieldErrors);
+      setErrorMessage(`Please fix ${Object.keys(fieldErrors).length} error(s) in the form`);
+      scrollToFirstError(fieldErrors);
+      setShowLiabilityNote(false); // Close modal if validation fails
       return;
     }
 
@@ -397,6 +401,15 @@ export const FoodRescueSection: React.FC<FoodRescueSectionProps> = ({
                   <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
                     <XCircle className="w-5 h-5 text-red-600 shrink-0" />
                     <p className="text-red-800">{errorMessage}</p>
+                  </div>
+                )}
+
+                {Object.keys(errors).length > 0 && status !== 'error' && (
+                  <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                    <p className="text-amber-800">
+                      Please fix {Object.keys(errors).length} error(s) in the form above
+                    </p>
                   </div>
                 )}
 
