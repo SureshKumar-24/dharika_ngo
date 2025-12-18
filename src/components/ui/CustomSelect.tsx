@@ -118,11 +118,14 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           aria-expanded={isOpen}
           aria-labelledby={selectId}
           className={cn(
-            'flex h-11 w-full items-center justify-between rounded-lg border-2 bg-white px-4 py-2 text-base font-medium text-left',
+            'group/select flex h-11 w-full items-center justify-between rounded-lg border-2 bg-white px-4 py-2 text-base font-medium text-left',
             'transition-all duration-200 ease-in-out',
             'focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold focus:shadow-md',
-            'hover:border-gold/60 hover:shadow-sm',
-            'cursor-pointer',
+            'cursor-pointer relative overflow-hidden',
+            // Hover effects
+            'hover:border-gold hover:shadow-lg hover:scale-[1.01]',
+            'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-gold/10 before:to-transparent',
+            'before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700',
             // Default state
             !error && 'border-gray-300',
             // Placeholder state
@@ -130,15 +133,18 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
             // Selected state
             !isPlaceholder && 'text-gray-900',
             // Error state
-            error && 'border-red-500 focus:ring-red-500/30 focus:border-red-500',
+            error && 'border-red-500 focus:ring-red-500/30 focus:border-red-500 hover:border-red-600',
             // Open state
-            isOpen && 'border-gold ring-2 ring-gold/30 shadow-md'
+            isOpen && 'border-gold ring-2 ring-gold/30 shadow-md scale-[1.01]'
           )}
         >
-          <span className="truncate">{displayText}</span>
+          <span className="truncate relative z-10 group-hover/select:text-gold transition-colors duration-200">
+            {displayText}
+          </span>
           <ChevronDown
             className={cn(
-              'h-5 w-5 transition-all duration-200 flex-shrink-0 ml-2',
+              'h-5 w-5 transition-all duration-200 flex-shrink-0 ml-2 relative z-10',
+              'group-hover/select:text-gold group-hover/select:scale-110',
               error ? 'text-red-500' : isFocused || isOpen ? 'text-gold' : 'text-gray-400',
               isOpen && 'rotate-180'
             )}
@@ -169,17 +175,21 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                   disabled={isDisabled}
                   onClick={() => !isDisabled && handleOptionClick(option.value)}
                   className={cn(
-                    'w-full px-4 py-2.5 text-left text-base flex items-center justify-between',
-                    'transition-colors duration-150',
+                    'group/option w-full px-4 py-2.5 text-left text-base flex items-center justify-between',
+                    'transition-all duration-150 relative',
                     'first:rounded-t-lg last:rounded-b-lg',
                     // Disabled/placeholder option
                     isDisabled && 'text-gray-400 bg-gray-50 cursor-not-allowed font-normal',
                     // Regular options
-                    !isDisabled && 'text-gray-900 hover:bg-gold/10 hover:text-gold cursor-pointer',
+                    !isDisabled && 'text-gray-900 hover:bg-gold/15 hover:text-gold hover:pl-5 cursor-pointer',
                     // Selected option
-                    isSelected && !isDisabled && 'bg-gold/20 text-gold font-medium',
+                    isSelected && !isDisabled && 'bg-gold/20 text-gold font-medium pl-5',
                     // Focus state
-                    !isDisabled && 'focus:outline-none focus:bg-gold/10 focus:text-gold'
+                    !isDisabled && 'focus:outline-none focus:bg-gold/15 focus:text-gold focus:pl-5',
+                    // Hover animation
+                    !isDisabled && 'before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-gold',
+                    !isDisabled && 'before:scale-y-0 hover:before:scale-y-100 before:transition-transform before:duration-200',
+                    isSelected && !isDisabled && 'before:scale-y-100'
                   )}
                 >
                   <span className="truncate">{option.label}</span>
