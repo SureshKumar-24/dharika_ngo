@@ -34,12 +34,12 @@ export function formatValidationErrors(errors: Record<string, string>): string {
  * Sanitize form data before submission
  */
 export function sanitizeFormData<T extends Record<string, any>>(data: T): T {
-  const sanitized = { ...data };
+  const sanitized = { ...data } as Record<string, any>;
   Object.keys(sanitized).forEach((key) => {
     if (typeof sanitized[key] === 'string') {
       // Trim whitespace
       sanitized[key] = sanitized[key].trim();
     }
   });
-  return sanitized;
+  return sanitized as T;
 }
